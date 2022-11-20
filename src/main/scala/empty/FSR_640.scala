@@ -239,11 +239,9 @@ class FSR_N_Reg() extends Module {
   temp_state_out := temp_state
   // meybe reginit?
 
-  // initialize temp variables
-  // temp_count := io.steps
+  // initialize io variables
   io.state_out := temp_state_out
   io.done := RegInit(0.U)
-  // temp_state := io.state
   when(edge_detect.io.out_tick === 1.U) {
     io.done := 0.U
     temp_state := io.state
@@ -257,12 +255,13 @@ class FSR_N_Reg() extends Module {
     // update done when temp_count reaches 0
   }.elsewhen(temp_count === 0.U) {
     io.done := 1.U
-  }.otherwise {
-    io.done := 0.U
-    temp_count := io.steps
-    io.state_out := temp_state_out
-    temp_state := io.state
   }
+  // .otherwise {
+  //   io.done := 0.U
+  //   temp_count := io.steps
+  //   io.state_out := temp_state_out
+  //   temp_state := io.state
+  // }
 }
 object FSR_640Main extends App {
   println("Generating the FSR hardware")
