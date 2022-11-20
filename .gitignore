@@ -1,0 +1,6 @@
+*.bloop
+*target
+*.metals
+*\project
+*generated
+*test_run_dir
