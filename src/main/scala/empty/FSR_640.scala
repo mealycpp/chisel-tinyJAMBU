@@ -258,8 +258,6 @@ class initialization_tinyJAMBU() extends Module {
         init_once_input := init_once_output
         when(loop_counter === 1.U) {
           init_inst_once.io.nonce := io.nonce(63, 32)
-        }.elsewhen(loop_counter === 0.U) {
-          init_inst_once.io.nonce := io.nonce(95, 64)
         }
         //   start init_once
         init_once_start_reg := 1.U
