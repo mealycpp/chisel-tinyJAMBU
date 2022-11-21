@@ -279,6 +279,53 @@ class initialization_tinyJAMBU() extends Module {
       done := 0.U
     }
 }
+// processes 32 bits
+class process_AD_once() extends Module {
+  val io = IO(new Bundle {
+    val ad = Input(UInt(32.W))
+    val key = Input(UInt(128.W))
+    val state = Input(UInt(128.W))
+    val start = Input(UInt(1.W))
+    val done = Output(UInt(1.W))
+    val state_out = Output(UInt(128.W))
+  })
+  val frame_bit_inst = Module(new whole_frame_bit())
+  val frame_state_out = Wire(UInt(128.W))
+  frame_bit_inst.io.in(3.U)
+  frame_bit_inst.io.state := io.state
+  frame_bit_inst.io.out := frame_state_out
+
+  val inst_FSR = Module(new FSR_N_Reg())
+  val fsr_done = Wire(UInt(1.W))
+  val fsr_start = Reg(UInt(1.W))
+  fsr_start := 0.U
+  val fsr_state_out = Wire(UInt(128.W))
+  fsr_done := inst_FSR.io.done
+  inst_FSR.io.key := io.key
+  inst_FSR.io.start := fsr_start
+  inst_FSR.io.state := fsr_state_out
+  fsr_state_out := inst_FSR.io.state_out
+
+  val tick_gen = Module(new tick())
+  val start_tick = Wire(UInt(1.W))
+  tick_gen.io.in := io.start
+  tick_gen.io.out_tick := start_tick
+
+  val temp_state = Wire(UInt(32.W))
+
+  // start whole module
+  // some wires may not be needed, kept for readability
+  when (start_tick === 1.U) {
+    fsr_start := 1.U
+    io.done := 0.U
+  }.elsewhen(fsr_done === 1.U) {
+    fsr_start := 0.U
+    // 32 bit directions might not be needed, but used here just in case
+    // temp_state not needed; kept for readability
+    temp_state := fsr_state_out(127,96) ^ io.ad(31,0)
+    io.state_out := temp_state(31,0) ## fsr_state_out(95,0)
+  }
+}
 class FSR_N_Reg() extends Module {
   val io = IO(new Bundle {
     val state = Input(UInt(128.W))
