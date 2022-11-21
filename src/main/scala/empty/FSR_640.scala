@@ -93,8 +93,9 @@ class whole_frame_bit() extends Module {
   })
   val inst_frame_bit_init = Module(new frame_bit_init())
   inst_frame_bit_init.io.in := io.in
-  inst_frame_bit_init.io.state := io.state(38,36)
-  io.out := io.state(127,39) ## inst_frame_bit_init.io.state_out(2,0) ## io.state(35,0)
+  inst_frame_bit_init.io.state := io.state(38, 36)
+  io.out := io.state(127, 39) ## inst_frame_bit_init.io.state_out(2, 0) ## io
+    .state(35, 0)
 }
 
 // This performs initialization once (32 bits)
@@ -267,11 +268,14 @@ class initialization_tinyJAMBU() extends Module {
         done := 0.U
       }
     }
-    .elsewhen(loop_counter === 0.U && init_inst_once.io.done === 1.U) {
+    .elsewhen(loop_counter === 0.U) {
+      init_inst_once.io.nonce := io.nonce(95, 64)
       // actually need to wait one more loop until output is correct
-      io.state_out := init_once_output
-      init_once_start_reg := 0.U
-      done := 1.U
+      when(init_inst_once.io.done === 1.U) {
+        io.state_out := init_once_output
+        init_once_start_reg := 0.U
+        done := 1.U
+      }
     }
     .otherwise {
       done := 0.U
