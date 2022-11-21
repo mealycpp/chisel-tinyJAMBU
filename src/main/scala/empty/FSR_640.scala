@@ -52,8 +52,8 @@ class frame_bit_init() extends Module {
     val state = Input(UInt(3.W))
     val state_out = Output(UInt(3.W))
   })
-  io.state_out := (io.state(0) ^ io.in(0)) ## (io.state(1) ^ io.in(1)) ## (io
-    .state(2) ^ io.in(2))
+  io.state_out := (io.state(2) ^ io.in(2)) ## (io.state(1) ^ io.in(1)) ## (io
+    .state(0) ^ io.in(0))
 }
 
 class init_key() extends Module {
@@ -85,6 +85,18 @@ class init_key() extends Module {
   }
 }
 
+class whole_frame_bit() extends Module {
+  val io = IO(new Bundle {
+    val in = Input(UInt(3.W))
+    val state = Input(UInt(128.W))
+    val out = Output(UInt(128.W))
+  })
+  val inst_frame_bit_init = Module(new frame_bit_init())
+  inst_frame_bit_init.io.in := io.in
+  inst_frame_bit_init.io.state := io.state(38,36)
+  io.out := io.state(127,39) ## inst_frame_bit_init.io.state_out(2,0) ## io.state(35,0)
+}
+
 // This performs initialization once (32 bits)
 // This means this module must be started 3 times to do all 96 bits of nonce
 // the variables going in are: key, state, nonce (32 bits), and start. The output is init_output (state with one 32 bit nonce mixed)
@@ -104,13 +116,10 @@ class initialization_tinyJAMBU_once() extends Module {
   state := io.state
   val state_out = Wire(UInt(128.W))
 
-  val start_FSR = Reg(UInt(1.W))
   val temp_nonce_state = Wire(UInt(32.W))
 
-  val output_of_whole_frame = Wire(UInt(128.W))
-  start_FSR := 0.U
-
   // apply framebits
+  val output_of_whole_frame = Wire(UInt(128.W))
   val single_frame_bit = Module(new frame_bit_init())
   val output_of_3_bit_frame = Wire(UInt(3.W))
   single_frame_bit.io.in := 1.U
@@ -126,6 +135,8 @@ class initialization_tinyJAMBU_once() extends Module {
   )
   // use tick to start FSR
   // this can be combined with init_once_edge to save a clock cycle
+  val start_FSR = Reg(UInt(1.W))
+  start_FSR := 0.U
   val fsr_sig_edge = Module(new tick())
   val start_sig = Wire(UInt(1.W))
   fsr_sig_edge.io.in := start_FSR
@@ -201,7 +212,6 @@ class initialization_tinyJAMBU() extends Module {
   val tick_init_gen = Module(new tick())
   tick_init_gen.io.in := done_key
   start_init_tick := tick_init_gen.io.out_tick
-
 
   val init_inst_once = Module(new initialization_tinyJAMBU_once())
   val init_once_input = Reg(UInt(128.W))

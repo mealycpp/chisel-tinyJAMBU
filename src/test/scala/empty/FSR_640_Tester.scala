@@ -265,7 +265,7 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
     test(new FSR_N_Reg()) { dut =>
       dut.io.key.poke(key)
       dut.io.state.poke(0)
-      dut.io.steps.poke(6)
+      dut.io.steps.poke(5)
       dut.io.start.poke(1)
       dut.io.done.expect(0)
       dut.clock.step()
@@ -276,7 +276,44 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
         println(dut.io.done.peek().litValue)
       }
       dut.io.done.expect(1)
-      dut.io.state_out.expect(BigInt("c5c6eda1546fd8c05b6186c6e749f5ed", 16))
+      dut.io.state_out.expect(BigInt("b505cbd12f65bbf2db809a68c8f4465d", 16))
+      dut.io.start.poke(0)
+      dut.clock.step()
+      // run with 5 rounds
+      dut.io.key.poke(key)
+      dut.io.state.poke(0)
+      dut.io.steps.poke(5)
+      dut.io.start.poke(1)
+      dut.io.done.expect(0)
+      dut.clock.step()
+      dut.io.start.poke(0)
+      dut.io.done.expect(0)
+      for (a <- 1 to 20) {
+        dut.clock.step()
+        println(dut.io.done.peek().litValue)
+      }
+      dut.io.done.expect(1)
+      dut.io.state_out.expect(BigInt("b505cbd12f65bbf2db809a68c8f4465d", 16))
+      dut.io.start.poke(0)
+      dut.clock.step()
+      // run with 5 rounds
+      dut.io.key.poke(key)
+      dut.io.state.poke(0)
+      dut.io.steps.poke(5)
+      dut.io.start.poke(1)
+      dut.io.done.expect(0)
+      dut.clock.step()
+      dut.io.start.poke(0)
+      dut.io.done.expect(0)
+      for (a <- 1 to 20) {
+        dut.clock.step()
+        println(dut.io.done.peek().litValue)
+      }
+      dut.io.done.expect(1)
+      dut.io.state_out.expect(BigInt("b505cbd12f65bbf2db809a68c8f4465d", 16))
+      dut.io.start.poke(0)
+      dut.clock.step()
+
     }
 
     // test(new FSR_N_Reg()) { dut =>
@@ -365,10 +402,7 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
       // state after 8 steps
       dut.io.state.poke(BigInt("9c435a6f66b7df88481f57e066a437e1", 16))
       dut.io.nonce.poke(BigInt("03020100", 16))
-      // dut.io.nonce.poke(BigInt("00010203", 16))
       dut.io.start.poke(1)
-      // dut.clock.step()
-      // dut.io.start.poke(0)
       for (i <- 1 to 20) {
         println(dut.io.done.peek().litValue)
         println(dut.io.single_initialization_out.peek().litValue.toString(16))
@@ -379,6 +413,84 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.single_initialization_out.expect(
         BigInt("1605DB68DB240E22742896C7C0B23058", 16)
       )
+      dut.io.start.poke(0)
+      dut.clock.step()
+
+      // run "second" init
+      dut.io.key.poke(key)
+      // state after 8 steps
+      dut.io.state.poke(BigInt("1605DB68DB240E22742896C7C0B23058", 16))
+      dut.io.nonce.poke(BigInt("07060504", 16))
+      dut.io.start.poke(1)
+      for (i <- 1 to 20) {
+        println(dut.io.done.peek().litValue)
+        println(dut.io.single_initialization_out.peek().litValue.toString(16))
+        dut.clock.step()
+      }
+      dut.io.done.expect(1)
+      println(dut.io.single_initialization_out.peek().litValue.toString(16))
+      dut.io.single_initialization_out.expect(
+        BigInt("23BFBB10D84618992FE6A1AC755EBA34", 16)
+      )
+      dut.io.start.poke(0)
+      dut.clock.step()
+      // run "third" init
+      dut.io.key.poke(key)
+      // state after 8 steps
+      dut.io.state.poke(BigInt("23BFBB10D84618992FE6A1AC755EBA34", 16))
+      dut.io.nonce.poke(BigInt("0B0A0908", 16))
+      dut.io.start.poke(1)
+      for (i <- 1 to 20) {
+        println(dut.io.done.peek().litValue)
+        println(dut.io.single_initialization_out.peek().litValue.toString(16))
+        dut.clock.step()
+      }
+      dut.io.done.expect(1)
+      println(dut.io.single_initialization_out.peek().litValue.toString(16))
+      dut.io.single_initialization_out.expect(
+        BigInt("EA5DC9488E487009BFB6ADC697CF5A5B", 16)
+      )
+      dut.io.start.poke(0)
+      dut.clock.step()
+    }
+  }
+  "test_nonce" should "work" in {
+    test(new whole_frame_bit()) { dut =>
+      // third
+      var state = BigInt("23BFBB10D84618992FE6A1AC755EBA34", 16)
+      // A turned into B
+      var state_out = BigInt("23BFBB10D84618992FE6A1BC755EBA34", 16)
+      dut.io.in.poke(BigInt("1", 16))
+      dut.io.state.poke(state)
+      dut.io.out.expect(state_out)
+      // first
+      state = BigInt("9C435A6F66B7DF88481F57E066A437E1", 16)
+      state_out = BigInt("9C435A6F66B7DF88481F57F066A437E1", 16)
+      dut.io.in.poke(BigInt("1", 16))
+      dut.io.state.poke(state)
+      dut.io.out.expect(state_out)
+
+    }
+  }
+  "Init_once_third" should "work" in {
+    test(new initialization_tinyJAMBU_once()) { dut =>
+      dut.io.key.poke(key)
+      // state after 8 steps
+      dut.io.state.poke(BigInt("23BFBB10D84618992FE6A1AC755EBA34", 16))
+      dut.io.nonce.poke(BigInt("0B0A0908", 16))
+      dut.io.start.poke(1)
+      for (i <- 1 to 20) {
+        println(dut.io.done.peek().litValue)
+        println(dut.io.single_initialization_out.peek().litValue.toString(16))
+        dut.clock.step()
+      }
+      dut.io.done.expect(1)
+      println(dut.io.single_initialization_out.peek().litValue.toString(16))
+      dut.io.single_initialization_out.expect(
+        BigInt("EA5DC9488E487009BFB6ADC697CF5A5B", 16)
+      )
+      dut.io.start.poke(0)
+      dut.clock.step()
     }
   }
   "Init_all" should "work" in {
