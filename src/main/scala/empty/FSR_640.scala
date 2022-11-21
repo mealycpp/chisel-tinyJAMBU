@@ -70,8 +70,13 @@ class init_key() extends Module {
   p1024.io.key := io.key
   io.state_out := p1024.io.state_out
   p1024.io.state := 0.U
+  val start_tick = Module(new tick())
+  val start_init_key = Reg(UInt(1.W))
+  start_tick.io.in := io.start
+  start_init_key := start_tick.io.out_tick
+
   io.done := 0.U
-  when(io.start === 1.U) {
+  when(start_init_key === 1.U) {
     p_start_reg := 1.U
     io.done := 0.U
   }.elsewhen(p1024.io.done === 1.U) {
@@ -112,23 +117,31 @@ class initialization_tinyJAMBU_once() extends Module {
   single_frame_bit.io.state := state(38, 36)
   output_of_3_bit_frame := single_frame_bit.io.state_out
   // recombine state with framebits
-  output_of_whole_frame := state(127, 39) ## output_of_3_bit_frame ## state(
+  output_of_whole_frame := state(127, 39) ## output_of_3_bit_frame(
+    2,
+    0
+  ) ## state(
     35,
     0
   )
   // use tick to start FSR
-  val sig_edge = Module(new tick())
+  // this can be combined with init_once_edge to save a clock cycle
+  val fsr_sig_edge = Module(new tick())
   val start_sig = Wire(UInt(1.W))
-  sig_edge.io.in := start_FSR
-  start_sig := sig_edge.io.out_tick
+  fsr_sig_edge.io.in := start_FSR
+  start_sig := fsr_sig_edge.io.out_tick
 
   val inst_FSR = Module(new FSR_N_Reg())
   inst_FSR.io.start := start_sig
   state_out := inst_FSR.io.state_out
-  inst_FSR.io.state := state
+  inst_FSR.io.state := output_of_whole_frame
   inst_FSR.io.key := io.key
-  inst_FSR.io.steps := 6.U
+  inst_FSR.io.steps := 5.U
 
+  val init_once_edge = Module(new tick())
+  val start_init = Wire(UInt(1.W))
+  init_once_edge.io.in := io.start
+  start_init := init_once_edge.io.out_tick
   // initialize other variables
 
   io.single_initialization_out := 0.U
@@ -136,7 +149,7 @@ class initialization_tinyJAMBU_once() extends Module {
   io.done := 0.U
 
   // start the FSR - uses start_FSR to use the tick module
-  when(io.start === 1.U) {
+  when(start_init === 1.U) {
     start_FSR := 1.U
     io.done := 0.U
   }.elsewhen(inst_FSR.io.done === 1.U) {
@@ -145,10 +158,10 @@ class initialization_tinyJAMBU_once() extends Module {
     start_FSR := 0.U
 
 // perform 32 bit xor with state and nonce
-    temp_nonce_state := output_of_whole_frame(127, 96) ^ io.nonce
+    temp_nonce_state := state_out(127, 96) ^ io.nonce(31, 0)
 
 // recombine state and put it at output
-    io.single_initialization_out := temp_nonce_state ## state_out(95, 0)
+    io.single_initialization_out := temp_nonce_state(31, 0) ## state_out(95, 0)
     io.done := 1.U
   }
 }
@@ -160,7 +173,7 @@ class initialization_tinyJAMBU() extends Module {
   val io = IO(new Bundle {
     val key = Input(UInt(128.W))
     val nonce = Input(UInt(96.W))
-    val state = Input(UInt(128.W))
+    // val state = Input(UInt(128.W))
     val state_out = Output(UInt(128.W))
     val start = Input(UInt(1.W))
     val done = Output(UInt(1.W))
@@ -168,54 +181,91 @@ class initialization_tinyJAMBU() extends Module {
   // start_tick_gen gets in start from this module
   // it outputs to the behavioral section
 
-  val start_init_tick = Wire(UInt(1.W))
-  val loop_counter = Reg(UInt(2.W))
-  val init_once_input = Reg(UInt(128.W))
+  val init_key = Module(new init_key())
+  val state = Wire(UInt(128.W))
+  val start_key = Wire(UInt(1.W))
+  start_key := 0.U
+  val done_key = Wire(UInt(1.W))
+  state := 0.U
+  init_key.io.key := io.key
+  init_key.io.start := start_key
+  done_key := init_key.io.done
+  state := init_key.io.state_out
 
+  val start_key_init_tick = Wire(UInt(1.W))
+  val tick_key_gen = Module(new tick())
+  tick_key_gen.io.in := io.start
+  start_key_init_tick := tick_key_gen.io.out_tick
+
+  val start_init_tick = Wire(UInt(1.W))
+  val tick_init_gen = Module(new tick())
+  tick_init_gen.io.in := done_key
+  start_init_tick := tick_init_gen.io.out_tick
+
+
+  val init_inst_once = Module(new initialization_tinyJAMBU_once())
+  val init_once_input = Reg(UInt(128.W))
   val init_once_output = Wire(UInt(128.W))
   val init_once_start_reg = Reg(UInt(1.W))
-  val init_inst_once = Module(new initialization_tinyJAMBU_once())
-  val tick_gen = Module(new tick())
-  tick_gen.io.in := io.start
-  start_init_tick := tick_gen.io.out_tick
-
   init_inst_once.io.state := init_once_input
   init_inst_once.io.start := init_once_start_reg
   init_once_output := init_inst_once.io.single_initialization_out
   init_inst_once.io.key := io.key
+  init_inst_once.io.nonce := io.nonce(31, 0)
 
-  init_inst_once.io.nonce := 0.U
-  io.state_out := 0.U
-  io.done := 0.U
+  val done = Reg(UInt(1.W))
+  io.state_out := init_once_output
+  io.done := done
+  done := 0.U
+  val loop_counter = Reg(UInt(2.W))
+  // For some reason, this locks done to 0
+  // loop_counter := 2.U
+
 //   start
   when(start_init_tick === 1.U) {
-    init_once_start_reg := 1.U
+    start_key := 0.U
     loop_counter := 2.U
     // give init_once the state
-    init_once_input := io.state
+    init_once_input := state
     // give init_once the nonce; should be 31,0 then 63,32 then 96,64
     init_inst_once.io.nonce := io.nonce(31, 0)
-    io.done := 0.U
+    init_once_start_reg := 1.U
+    done := 0.U
   }
-  when(loop_counter > 0.U) {
-    // if init_once is done
-    when(init_inst_once.io.done === 1.U) {
-      // only when loop is done does the counter decrease and the state register get recycled
-      loop_counter := loop_counter - 1.U
-      init_once_input := init_once_output
-      when(loop_counter === 1.U) {
-        init_inst_once.io.nonce := io.nonce(63, 32)
-      }.elsewhen(loop_counter === 0.U) {
-        init_inst_once.io.nonce := io.nonce(95, 64)
-      }
-      //   start init_once
-      init_once_start_reg := 1.U
+    .elsewhen(start_key_init_tick === 1.U) {
+      // assumes that the variables going into init_key are ready; if not, then they need to be set here
+      state := init_key.io.state_out
+      init_key.io.key := io.key
+      start_key := 1.U
+      done := 0.U
     }
-    // can do something here if the fsr is not done, but probably don't need to
-  }.elsewhen(loop_counter === 0.U) {
-    io.state_out := init_once_output
-    io.done := 1.U
-  }
+    .elsewhen(loop_counter > 0.U) {
+      // if init_once is done
+      when(init_inst_once.io.done === 1.U) {
+        // only when loop is done does the counter decrease and the state register get recycled
+        loop_counter := loop_counter - 1.U
+        init_once_input := init_once_output
+        when(loop_counter === 1.U) {
+          init_inst_once.io.nonce := io.nonce(63, 32)
+        }.elsewhen(loop_counter === 0.U) {
+          init_inst_once.io.nonce := io.nonce(95, 64)
+        }
+        //   start init_once
+        init_once_start_reg := 1.U
+      }.otherwise {
+        init_once_start_reg := 0.U
+        done := 0.U
+      }
+    }
+    .elsewhen(loop_counter === 0.U && init_inst_once.io.done === 1.U) {
+      // actually need to wait one more loop until output is correct
+      io.state_out := init_once_output
+      init_once_start_reg := 0.U
+      done := 1.U
+    }
+    .otherwise {
+      done := 0.U
+    }
 }
 class FSR_N_Reg() extends Module {
   val io = IO(new Bundle {
@@ -256,12 +306,6 @@ class FSR_N_Reg() extends Module {
   }.elsewhen(temp_count === 0.U) {
     io.done := 1.U
   }
-  // .otherwise {
-  //   io.done := 0.U
-  //   temp_count := io.steps
-  //   io.state_out := temp_state_out
-  //   temp_state := io.state
-  // }
 }
 object FSR_640Main extends App {
   println("Generating the FSR hardware")

@@ -16,6 +16,20 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
   val key = BigInt("0F0E0D0C0B0A09080706050403020100", 16)
   println("key is: ")
   println(key)
+  "init_key" should "work" in {
+    test(new init_key()) { dut =>
+      dut.io.key.poke(key)
+      dut.io.start.poke(1)
+      dut.clock.step()
+      dut.io.done.expect(0)
+      for (i <- 1 to 20) {
+        dut.clock.step()
+        println(dut.io.done.peek().litValue)
+      }
+      dut.io.done.expect(1)
+      dut.io.state_out.expect(BigInt("9c435a6f66b7df88481f57e066a437e1", 16))
+    }
+  }
   "Edge_Detector" should "get edge" in {
     test(new tick()) { dut =>
       dut.io.in.poke(0)
@@ -345,87 +359,44 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
     // }
   }
   val nonce = BigInt("0B0A09080706050403020100", 16)
-  "Init" should "match" in {
+  "Init_once" should "work" in {
     test(new initialization_tinyJAMBU_once()) { dut =>
       dut.io.key.poke(key)
-      dut.io.state.poke(0)
-      dut.io.start.poke(1)
+      // state after 8 steps
+      dut.io.state.poke(BigInt("9c435a6f66b7df88481f57e066a437e1", 16))
       dut.io.nonce.poke(BigInt("03020100", 16))
-      dut.clock.step()
-      dut.io.start.poke(0)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
-      dut.clock.step()
-      println(dut.io.done.peek().litValue)
+      // dut.io.nonce.poke(BigInt("00010203", 16))
+      dut.io.start.poke(1)
+      // dut.clock.step()
+      // dut.io.start.poke(0)
+      for (i <- 1 to 20) {
+        println(dut.io.done.peek().litValue)
+        println(dut.io.single_initialization_out.peek().litValue.toString(16))
+        dut.clock.step()
+      }
       dut.io.done.expect(1)
+      println(dut.io.single_initialization_out.peek().litValue.toString(16))
+      dut.io.single_initialization_out.expect(
+        BigInt("1605DB68DB240E22742896C7C0B23058", 16)
+      )
     }
+  }
+  "Init_all" should "work" in {
     test(new initialization_tinyJAMBU()) { dut =>
       dut.io.key.poke(key)
-      dut.io.state.poke(0)
       dut.io.nonce.poke(nonce)
       dut.io.start.poke(1)
-      dut.io.done.expect(0)
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
-      dut.clock.step()
+      // dut.clock.step()
+      // dut.io.done.expect(0)
+      for (i <- 1 to 40) {
+        print("state is: ")
+        println(dut.io.state_out.peek().litValue.toString(16))
+        print("done is: ")
+        println(dut.io.done.peek().litValue)
+        dut.clock.step()
+      }
       dut.io.done.expect(1)
+      println(dut.io.state_out.peek().litValue.toString(16))
       dut.io.state_out.expect(BigInt("EA5DC9488E487009BFB6ADC697CF5A5B", 16))
     }
   }
