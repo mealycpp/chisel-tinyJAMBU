@@ -17,8 +17,25 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
   val nonce = BigInt("0B0A09080706050403020100", 16)
   println("key is: ")
   println(key)
+
+  "Process_ad_partial" should "work" in {
+    test(new process_partial_once()) { dut =>
+      dut.io.ad.poke(0)
+      dut.io.key.poke(key)
+      dut.io.state.poke(0)
+      dut.io.adlen_left.poke(1)
+      dut.io.start.poke(1)
+      dut.io.done.expect(0)
+      for (i <- 1 to 20) {
+        dut.clock.step()
+        println(dut.io.done.peek().litValue)
+      }
+      dut.io.done.expect(1)
+      dut.io.state_out.expect(BigInt("6C8A71DA04A3341F64D2A3C8CF009E65", 16))
+    }
+  }
   "Process_ad_once" should "be correct" in {
-    test(new process_AD_once()) {dut =>
+    test(new process_AD_once()) { dut =>
       // in C, this is simulating an adlength of 4 (32 bits) with state of 0
       // ad is also 0
       dut.io.ad.poke(0)

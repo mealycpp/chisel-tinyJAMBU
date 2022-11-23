@@ -3512,42 +3512,42 @@ circuit initialization_tinyJAMBU_once :
     output io : { flip state : UInt<128>, flip key : UInt<128>, flip steps : UInt<10>, flip start : UInt<1>, state_out : UInt<128>, done : UInt<1>}
 
     reg temp_state : UInt<128>, clock with :
-      reset => (UInt<1>("h0"), temp_state) @[FSR_640.scala 342:23]
-    wire temp_state_out : UInt<128> @[FSR_640.scala 343:28]
+      reset => (UInt<1>("h0"), temp_state) @[FSR_640.scala 488:23]
+    wire temp_state_out : UInt<128> @[FSR_640.scala 489:28]
     reg temp_count : UInt<10>, clock with :
-      reset => (UInt<1>("h0"), temp_count) @[FSR_640.scala 344:23]
-    inst FSR_128 of FSR_640 @[FSR_640.scala 346:23]
+      reset => (UInt<1>("h0"), temp_count) @[FSR_640.scala 490:23]
+    inst FSR_128 of FSR_640 @[FSR_640.scala 492:23]
     FSR_128.clock <= clock
     FSR_128.reset <= reset
-    inst edge_detect of tick_1 @[FSR_640.scala 347:27]
+    inst edge_detect of tick_1 @[FSR_640.scala 493:27]
     edge_detect.clock <= clock
     edge_detect.reset <= reset
-    edge_detect.io.in <= io.start @[FSR_640.scala 348:21]
-    FSR_128.io.key <= io.key @[FSR_640.scala 350:18]
-    FSR_128.io.state <= temp_state @[FSR_640.scala 351:20]
-    temp_state_out <= temp_state @[FSR_640.scala 352:18]
-    io.state_out <= temp_state_out @[FSR_640.scala 356:16]
+    edge_detect.io.in <= io.start @[FSR_640.scala 494:21]
+    FSR_128.io.key <= io.key @[FSR_640.scala 496:18]
+    FSR_128.io.state <= temp_state @[FSR_640.scala 497:20]
+    temp_state_out <= temp_state @[FSR_640.scala 498:18]
+    io.state_out <= temp_state_out @[FSR_640.scala 502:16]
     reg io_done_REG : UInt, clock with :
-      reset => (reset, UInt<1>("h0")) @[FSR_640.scala 357:21]
-    io.done <= io_done_REG @[FSR_640.scala 357:11]
-    node _T = eq(edge_detect.io.out_tick, UInt<1>("h1")) @[FSR_640.scala 358:32]
-    when _T : @[FSR_640.scala 358:41]
-      io.done <= UInt<1>("h0") @[FSR_640.scala 359:13]
-      temp_state <= io.state @[FSR_640.scala 360:16]
-      temp_state_out <= temp_state @[FSR_640.scala 361:20]
-      temp_count <= io.steps @[FSR_640.scala 362:16]
+      reset => (reset, UInt<1>("h0")) @[FSR_640.scala 503:21]
+    io.done <= io_done_REG @[FSR_640.scala 503:11]
+    node _T = eq(edge_detect.io.out_tick, UInt<1>("h1")) @[FSR_640.scala 504:32]
+    when _T : @[FSR_640.scala 504:41]
+      io.done <= UInt<1>("h0") @[FSR_640.scala 505:13]
+      temp_state <= io.state @[FSR_640.scala 506:16]
+      temp_state_out <= temp_state @[FSR_640.scala 507:20]
+      temp_count <= io.steps @[FSR_640.scala 508:16]
     else :
-      node _T_1 = gt(temp_count, UInt<1>("h0")) @[FSR_640.scala 364:25]
-      when _T_1 : @[FSR_640.scala 364:32]
-        temp_state <= temp_state_out @[FSR_640.scala 365:16]
-        temp_state_out <= FSR_128.io.state_out @[FSR_640.scala 366:20]
-        node _temp_count_T = sub(temp_count, UInt<1>("h1")) @[FSR_640.scala 367:30]
-        node _temp_count_T_1 = tail(_temp_count_T, 1) @[FSR_640.scala 367:30]
-        temp_count <= _temp_count_T_1 @[FSR_640.scala 367:16]
+      node _T_1 = gt(temp_count, UInt<1>("h0")) @[FSR_640.scala 510:25]
+      when _T_1 : @[FSR_640.scala 510:32]
+        temp_state <= temp_state_out @[FSR_640.scala 511:16]
+        temp_state_out <= FSR_128.io.state_out @[FSR_640.scala 512:20]
+        node _temp_count_T = sub(temp_count, UInt<1>("h1")) @[FSR_640.scala 513:30]
+        node _temp_count_T_1 = tail(_temp_count_T, 1) @[FSR_640.scala 513:30]
+        temp_count <= _temp_count_T_1 @[FSR_640.scala 513:16]
       else :
-        node _T_2 = eq(temp_count, UInt<1>("h0")) @[FSR_640.scala 369:25]
-        when _T_2 : @[FSR_640.scala 369:34]
-          io.done <= UInt<1>("h1") @[FSR_640.scala 370:13]
+        node _T_2 = eq(temp_count, UInt<1>("h0")) @[FSR_640.scala 515:25]
+        when _T_2 : @[FSR_640.scala 515:34]
+          io.done <= UInt<1>("h1") @[FSR_640.scala 516:13]
 
   module tick_2 :
     input clock : Clock

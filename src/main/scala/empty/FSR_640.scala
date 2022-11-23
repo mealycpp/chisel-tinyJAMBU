@@ -279,6 +279,10 @@ class initialization_tinyJAMBU() extends Module {
       done := 0.U
     }
 }
+
+// adlen_left should be between 1 and 3; 0 and 4 means there shouldn't be a partial block
+// technically can use 2 bits, but using 3 is more readable
+// also tecnically the partial block can be as small as a single bit, but to match the c implmenetation, it uses a byte
 class process_partial_once() extends Module {
   val io = IO(new Bundle {
     val ad = Input(UInt(32.W))
@@ -286,12 +290,72 @@ class process_partial_once() extends Module {
     val state = Input(UInt(128.W))
     val key = Input(UInt(128.W))
     val start = Input(UInt(1.W))
+    val state_out = Output(UInt(128.W))
+    val done = Output(UInt(1.W))
   })
   val frame = Module(new whole_frame_bit())
+  val frame_out = Wire(UInt(128.W))
   frame.io.in := 3.U
   frame.io.state := io.state
-  frame.io.out
-  
+  frame_out := frame.io.out
+
+  val tick_gen = Module(new tick())
+  tick_gen.io.in := io.start
+
+  val inst_fsr = Module(new FSR_N_Reg())
+  val fsr_out = Wire(UInt(129.W))
+  inst_fsr.io.state := frame_out
+  fsr_out := inst_fsr.io.state_out
+  inst_fsr.io.key := io.key
+  inst_fsr.io.steps := 5.U
+  inst_fsr.io.start := tick_gen.io.out_tick
+
+  val number_xor = Wire(UInt(128.W))
+
+  when(inst_fsr.io.done === 1.U) {
+    // 0 left should never happen
+    when(io.adlen_left === 1.U) {
+      // take first eight bits
+      number_xor := fsr_out(127, 96 + 8) ## (
+        fsr_out((96 + 8) - 1, 96) ^ io.ad(7, 0)
+      ) ## fsr_out(95, 0)
+      io.state_out := number_xor(127, 34) ## (number_xor(
+        33,
+        32
+      ) ^ 1.U) ## number_xor(31, 0)
+    }
+      .elsewhen(io.adlen_left === 2.U) {
+        // take up to second eight bits
+        number_xor := fsr_out(127, 96 + 16) ## (
+          fsr_out((96 + 16) - 1, 96) ^ io.ad(15, 0)
+        ) ## fsr_out(95, 0)
+        io.state_out := number_xor(127, 34) ## (number_xor(
+          33,
+          32
+        ) ^ 2.U) ## number_xor(31, 0)
+      }
+      .elsewhen(io.adlen_left === 3.U) {
+        // take up to third eight bits (max)
+        number_xor := fsr_out(127, 96 + 24) ## (
+          fsr_out((96 + 24) - 1, 96) ^ io.ad(23, 0)
+        ) ## fsr_out(95, 0)
+        io.state_out := number_xor(127, 34) ## (number_xor(
+          33,
+          32
+        ) ^ 3.U) ## number_xor(31, 0)
+
+      }
+      .otherwise {
+        number_xor := 0.U
+        io.state_out := 0.U
+        io.done := 0.U
+      }
+      io.done := 1.U
+  }.otherwise {
+    number_xor := 0.U
+    io.state_out := 0.U
+    io.done := 0.U
+  }
 }
 // processes 32 bits
 class process_AD_once() extends Module {
@@ -382,31 +446,36 @@ class process_AD() extends Module {
   process_once.io.start := start_process_AD.io.out_tick
   process_once.io.state := process_state_in
   process_state_out := process_once.io.state_out
+
+  val inst_partial = Module(new process_partial_once())
+
   when(ad_count > 4.U) {
     ad_count := ad_count - 4.U
-  }.elsewhen (ad_count < 4.U) {
+  }.elsewhen(ad_count < 4.U) {
     // perform partial block:
-    
+    inst_partial.io.ad := io.ad
+    inst_partial.io.adlen_left := ad_count
+    inst_partial.io.state := process_state_out
+    inst_partial.io.start := 1.U
     // frame bit
 
     // xor rest with ad
     process_state_out
 
     // xor number of bytes
-  } 
-  .otherwise {
+  }.otherwise {}
+
+  when (inst_partial.io.done === 1.U) {
 
   }
-
-  when (process_once.io.done === 1.U) {
+  when(process_once.io.done === 1.U) {
     process_state_in := process_state_out
     // request new ad
-    // 
+    //
     io.request_fifo := 1.U
-  }.otherwise {
-
-  }
+  }.otherwise {}
 }
+
 class FSR_N_Reg() extends Module {
   val io = IO(new Bundle {
     val state = Input(UInt(128.W))
@@ -468,4 +537,12 @@ object FSR_640Main extends App {
     new process_AD_once(),
     Array("--target-dir", "generated/whole")
   )
+  emitVerilog(
+    new process_partial_once(),
+    Array("--target-dir", "generated/whole")
+  )
+  // emitVerilog(
+  //   new process_AD(),
+  //   Array("--target-dir", "generated/whole")
+  // )
 }
