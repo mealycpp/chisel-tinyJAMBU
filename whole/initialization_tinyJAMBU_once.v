@@ -2,9 +2,9 @@ module frame_bit_init(
   input  [2:0] io_state,
   output [2:0] io_state_out
 );
-  wire  _io_state_out_T_2 = io_state[0] ^ 1'h1; // @[FSR_640.scala 55:32]
-  wire [1:0] _io_state_out_T_6 = {_io_state_out_T_2,io_state[1]}; // @[FSR_640.scala 55:44]
-  assign io_state_out = {_io_state_out_T_6,io_state[2]}; // @[FSR_640.scala 55:72]
+  wire [1:0] _io_state_out_T_6 = {io_state[2],io_state[1]}; // @[FSR_640.scala 55:44]
+  wire  _io_state_out_T_9 = io_state[0] ^ 1'h1; // @[FSR_640.scala 56:15]
+  assign io_state_out = {_io_state_out_T_6,_io_state_out_T_9}; // @[FSR_640.scala 55:72]
 endmodule
 module tick(
   input   clock,
@@ -1373,52 +1373,48 @@ module FSR_N_Reg(
   reg [127:0] _RAND_0;
   reg [31:0] _RAND_1;
 `endif // RANDOMIZE_REG_INIT
-  wire [127:0] FSR_128_io_state; // @[FSR_640.scala 233:23]
-  wire [127:0] FSR_128_io_key; // @[FSR_640.scala 233:23]
-  wire [127:0] FSR_128_io_state_out; // @[FSR_640.scala 233:23]
-  wire  edge_detect_clock; // @[FSR_640.scala 234:27]
-  wire  edge_detect_io_in; // @[FSR_640.scala 234:27]
-  wire  edge_detect_io_out_tick; // @[FSR_640.scala 234:27]
-  reg [127:0] temp_state; // @[FSR_640.scala 229:23]
-  reg [9:0] temp_count; // @[FSR_640.scala 231:23]
-  wire [9:0] _temp_count_T_1 = temp_count - 10'h1; // @[FSR_640.scala 258:30]
-  wire  _T_2 = temp_count == 10'h0; // @[FSR_640.scala 260:25]
-  wire [127:0] _GEN_2 = temp_count > 10'h0 ? FSR_128_io_state_out : temp_state; // @[FSR_640.scala 239:18 253:32 255:20]
-  wire  _GEN_4 = temp_count > 10'h0 ? 1'h0 : _T_2; // @[FSR_640.scala 245:11 253:32]
-  FSR_640 FSR_128 ( // @[FSR_640.scala 233:23]
+  wire [127:0] FSR_128_io_state; // @[FSR_640.scala 346:23]
+  wire [127:0] FSR_128_io_key; // @[FSR_640.scala 346:23]
+  wire [127:0] FSR_128_io_state_out; // @[FSR_640.scala 346:23]
+  wire  edge_detect_clock; // @[FSR_640.scala 347:27]
+  wire  edge_detect_io_in; // @[FSR_640.scala 347:27]
+  wire  edge_detect_io_out_tick; // @[FSR_640.scala 347:27]
+  reg [127:0] temp_state; // @[FSR_640.scala 342:23]
+  reg [9:0] temp_count; // @[FSR_640.scala 344:23]
+  wire [9:0] _temp_count_T_1 = temp_count - 10'h1; // @[FSR_640.scala 367:30]
+  wire  _T_2 = temp_count == 10'h0; // @[FSR_640.scala 369:25]
+  wire [127:0] _GEN_2 = temp_count > 10'h0 ? FSR_128_io_state_out : temp_state; // @[FSR_640.scala 352:18 364:32 366:20]
+  wire  _GEN_4 = temp_count > 10'h0 ? 1'h0 : _T_2; // @[FSR_640.scala 357:11 364:32]
+  FSR_640 FSR_128 ( // @[FSR_640.scala 346:23]
     .io_state(FSR_128_io_state),
     .io_key(FSR_128_io_key),
     .io_state_out(FSR_128_io_state_out)
   );
-  tick edge_detect ( // @[FSR_640.scala 234:27]
+  tick edge_detect ( // @[FSR_640.scala 347:27]
     .clock(edge_detect_clock),
     .io_in(edge_detect_io_in),
     .io_out_tick(edge_detect_io_out_tick)
   );
-  assign io_state_out = edge_detect_io_out_tick ? temp_state : _GEN_2; // @[FSR_640.scala 247:41 250:20]
-  assign io_done = edge_detect_io_out_tick ? 1'h0 : _GEN_4; // @[FSR_640.scala 247:41 248:13]
-  assign FSR_128_io_state = temp_state; // @[FSR_640.scala 238:20]
-  assign FSR_128_io_key = io_key; // @[FSR_640.scala 237:18]
+  assign io_state_out = edge_detect_io_out_tick ? temp_state : _GEN_2; // @[FSR_640.scala 358:41 361:20]
+  assign io_done = edge_detect_io_out_tick ? 1'h0 : _GEN_4; // @[FSR_640.scala 358:41 359:13]
+  assign FSR_128_io_state = temp_state; // @[FSR_640.scala 351:20]
+  assign FSR_128_io_key = io_key; // @[FSR_640.scala 350:18]
   assign edge_detect_clock = clock;
-  assign edge_detect_io_in = io_start; // @[FSR_640.scala 235:21]
+  assign edge_detect_io_in = io_start; // @[FSR_640.scala 348:21]
   always @(posedge clock) begin
-    if (edge_detect_io_out_tick) begin // @[FSR_640.scala 247:41]
-      temp_state <= io_state; // @[FSR_640.scala 249:16]
-    end else if (temp_count > 10'h0) begin // @[FSR_640.scala 253:32]
-      if (!(edge_detect_io_out_tick)) begin // @[FSR_640.scala 247:41]
-        if (temp_count > 10'h0) begin // @[FSR_640.scala 253:32]
-          temp_state <= FSR_128_io_state_out; // @[FSR_640.scala 255:20]
+    if (edge_detect_io_out_tick) begin // @[FSR_640.scala 358:41]
+      temp_state <= io_state; // @[FSR_640.scala 360:16]
+    end else if (temp_count > 10'h0) begin // @[FSR_640.scala 364:32]
+      if (!(edge_detect_io_out_tick)) begin // @[FSR_640.scala 358:41]
+        if (temp_count > 10'h0) begin // @[FSR_640.scala 364:32]
+          temp_state <= FSR_128_io_state_out; // @[FSR_640.scala 366:20]
         end
       end
-    end else begin
-      temp_state <= io_state; // @[FSR_640.scala 246:14]
     end
-    if (edge_detect_io_out_tick) begin // @[FSR_640.scala 247:41]
-      temp_count <= 10'h6; // @[FSR_640.scala 251:16]
-    end else if (temp_count > 10'h0) begin // @[FSR_640.scala 253:32]
-      temp_count <= _temp_count_T_1; // @[FSR_640.scala 258:16]
-    end else begin
-      temp_count <= 10'h6; // @[FSR_640.scala 243:14]
+    if (edge_detect_io_out_tick) begin // @[FSR_640.scala 358:41]
+      temp_count <= 10'h5; // @[FSR_640.scala 362:16]
+    end else if (temp_count > 10'h0) begin // @[FSR_640.scala 364:32]
+      temp_count <= _temp_count_T_1; // @[FSR_640.scala 367:16]
     end
   end
 // Register and memory initialization
@@ -1482,37 +1478,41 @@ module initialization_tinyJAMBU_once(
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
-  wire [2:0] single_frame_bit_io_state; // @[FSR_640.scala 109:32]
-  wire [2:0] single_frame_bit_io_state_out; // @[FSR_640.scala 109:32]
-  wire  sig_edge_clock; // @[FSR_640.scala 120:24]
-  wire  sig_edge_io_in; // @[FSR_640.scala 120:24]
-  wire  sig_edge_io_out_tick; // @[FSR_640.scala 120:24]
-  wire  inst_FSR_clock; // @[FSR_640.scala 125:24]
-  wire [127:0] inst_FSR_io_state; // @[FSR_640.scala 125:24]
-  wire [127:0] inst_FSR_io_key; // @[FSR_640.scala 125:24]
-  wire  inst_FSR_io_start; // @[FSR_640.scala 125:24]
-  wire [127:0] inst_FSR_io_state_out; // @[FSR_640.scala 125:24]
-  wire  inst_FSR_io_done; // @[FSR_640.scala 125:24]
-  reg  start_FSR; // @[FSR_640.scala 102:22]
-  wire [2:0] output_of_3_bit_frame = single_frame_bit_io_state_out; // @[FSR_640.scala 110:35 113:25]
-  wire [127:0] output_of_whole_frame = {io_state[127:39],output_of_3_bit_frame,io_state[35:0]}; // @[FSR_640.scala 115:68]
-  wire  _T_1 = inst_FSR_io_done; // @[FSR_640.scala 142:31]
-  wire [31:0] _temp_nonce_state_T_1 = output_of_whole_frame[127:96] ^ io_nonce; // @[FSR_640.scala 148:56]
-  wire [127:0] state_out = inst_FSR_io_state_out; // @[FSR_640.scala 100:23 127:13]
-  wire [31:0] _GEN_1 = inst_FSR_io_done ? _temp_nonce_state_T_1 : 32'h0; // @[FSR_640.scala 135:20 142:40 148:22]
-  wire [31:0] temp_nonce_state = io_start ? 32'h0 : _GEN_1; // @[FSR_640.scala 135:20 139:26]
-  wire [127:0] _io_single_initialization_out_T_1 = {temp_nonce_state,state_out[95:0]}; // @[FSR_640.scala 151:54]
-  wire [127:0] _GEN_2 = inst_FSR_io_done ? _io_single_initialization_out_T_1 : 128'h0; // @[FSR_640.scala 134:32 142:40 151:34]
-  frame_bit_init single_frame_bit ( // @[FSR_640.scala 109:32]
+  wire [2:0] single_frame_bit_io_state; // @[FSR_640.scala 124:32]
+  wire [2:0] single_frame_bit_io_state_out; // @[FSR_640.scala 124:32]
+  wire  fsr_sig_edge_clock; // @[FSR_640.scala 141:28]
+  wire  fsr_sig_edge_io_in; // @[FSR_640.scala 141:28]
+  wire  fsr_sig_edge_io_out_tick; // @[FSR_640.scala 141:28]
+  wire  inst_FSR_clock; // @[FSR_640.scala 146:24]
+  wire [127:0] inst_FSR_io_state; // @[FSR_640.scala 146:24]
+  wire [127:0] inst_FSR_io_key; // @[FSR_640.scala 146:24]
+  wire  inst_FSR_io_start; // @[FSR_640.scala 146:24]
+  wire [127:0] inst_FSR_io_state_out; // @[FSR_640.scala 146:24]
+  wire  inst_FSR_io_done; // @[FSR_640.scala 146:24]
+  wire  init_once_edge_clock; // @[FSR_640.scala 153:30]
+  wire  init_once_edge_io_in; // @[FSR_640.scala 153:30]
+  wire  init_once_edge_io_out_tick; // @[FSR_640.scala 153:30]
+  wire [2:0] output_of_3_bit_frame = single_frame_bit_io_state_out; // @[FSR_640.scala 125:35 128:25]
+  wire [91:0] _output_of_whole_frame_T_2 = {io_state[127:39],output_of_3_bit_frame}; // @[FSR_640.scala 130:43]
+  reg  start_FSR; // @[FSR_640.scala 139:22]
+  wire  start_init = init_once_edge_io_out_tick; // @[FSR_640.scala 154:24 156:14]
+  wire  _T_1 = inst_FSR_io_done; // @[FSR_640.scala 167:31]
+  wire [127:0] state_out = inst_FSR_io_state_out; // @[FSR_640.scala 118:23 148:13]
+  wire [31:0] _temp_nonce_state_T_2 = state_out[127:96] ^ io_nonce; // @[FSR_640.scala 173:44]
+  wire [31:0] _GEN_1 = inst_FSR_io_done ? _temp_nonce_state_T_2 : 32'h0; // @[FSR_640.scala 160:20 167:40 173:22]
+  wire [31:0] temp_nonce_state = start_init ? 32'h0 : _GEN_1; // @[FSR_640.scala 160:20 164:28]
+  wire [127:0] _io_single_initialization_out_T_2 = {temp_nonce_state,state_out[95:0]}; // @[FSR_640.scala 176:61]
+  wire [127:0] _GEN_2 = inst_FSR_io_done ? _io_single_initialization_out_T_2 : 128'h0; // @[FSR_640.scala 159:32 167:40 176:34]
+  frame_bit_init single_frame_bit ( // @[FSR_640.scala 124:32]
     .io_state(single_frame_bit_io_state),
     .io_state_out(single_frame_bit_io_state_out)
   );
-  tick sig_edge ( // @[FSR_640.scala 120:24]
-    .clock(sig_edge_clock),
-    .io_in(sig_edge_io_in),
-    .io_out_tick(sig_edge_io_out_tick)
+  tick fsr_sig_edge ( // @[FSR_640.scala 141:28]
+    .clock(fsr_sig_edge_clock),
+    .io_in(fsr_sig_edge_io_in),
+    .io_out_tick(fsr_sig_edge_io_out_tick)
   );
-  FSR_N_Reg inst_FSR ( // @[FSR_640.scala 125:24]
+  FSR_N_Reg inst_FSR ( // @[FSR_640.scala 146:24]
     .clock(inst_FSR_clock),
     .io_state(inst_FSR_io_state),
     .io_key(inst_FSR_io_key),
@@ -1520,17 +1520,24 @@ module initialization_tinyJAMBU_once(
     .io_state_out(inst_FSR_io_state_out),
     .io_done(inst_FSR_io_done)
   );
-  assign io_single_initialization_out = io_start ? 128'h0 : _GEN_2; // @[FSR_640.scala 139:26 134:32]
-  assign io_done = io_start ? 1'h0 : _T_1; // @[FSR_640.scala 139:26 141:13]
-  assign single_frame_bit_io_state = io_state[38:36]; // @[FSR_640.scala 112:37]
-  assign sig_edge_clock = clock;
-  assign sig_edge_io_in = start_FSR; // @[FSR_640.scala 122:18]
+  tick init_once_edge ( // @[FSR_640.scala 153:30]
+    .clock(init_once_edge_clock),
+    .io_in(init_once_edge_io_in),
+    .io_out_tick(init_once_edge_io_out_tick)
+  );
+  assign io_single_initialization_out = start_init ? 128'h0 : _GEN_2; // @[FSR_640.scala 164:28 159:32]
+  assign io_done = start_init ? 1'h0 : _T_1; // @[FSR_640.scala 164:28 166:13]
+  assign single_frame_bit_io_state = io_state[38:36]; // @[FSR_640.scala 127:37]
+  assign fsr_sig_edge_clock = clock;
+  assign fsr_sig_edge_io_in = start_FSR; // @[FSR_640.scala 143:22]
   assign inst_FSR_clock = clock;
-  assign inst_FSR_io_state = io_state; // @[FSR_640.scala 98:19 99:9]
-  assign inst_FSR_io_key = io_key; // @[FSR_640.scala 129:19]
-  assign inst_FSR_io_start = sig_edge_io_out_tick; // @[FSR_640.scala 121:23 123:13]
+  assign inst_FSR_io_state = {_output_of_whole_frame_T_2,io_state[35:0]}; // @[FSR_640.scala 133:5]
+  assign inst_FSR_io_key = io_key; // @[FSR_640.scala 150:19]
+  assign inst_FSR_io_start = fsr_sig_edge_io_out_tick; // @[FSR_640.scala 142:23 144:13]
+  assign init_once_edge_clock = clock;
+  assign init_once_edge_io_in = io_start; // @[FSR_640.scala 155:24]
   always @(posedge clock) begin
-    start_FSR <= io_start; // @[FSR_640.scala 139:26 140:15]
+    start_FSR <= init_once_edge_io_out_tick; // @[FSR_640.scala 154:24 156:14]
   end
 // Register and memory initialization
 `ifdef RANDOMIZE_GARBAGE_ASSIGN

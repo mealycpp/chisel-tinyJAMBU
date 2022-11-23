@@ -2,782 +2,788 @@
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|tick",
-    "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/sig_edge:tick",
-    "index":0.007518796992481203
+    "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/fsr_sig_edge:tick",
+    "index":0.007462686567164179
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once:FSR_once",
-    "index":0.015037593984962405
+    "index":0.014925373134328358
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_1",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_1:FSR_once",
-    "index":0.022556390977443608
+    "index":0.022388059701492536
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_2",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_2:FSR_once",
-    "index":0.03007518796992481
+    "index":0.029850746268656716
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_3",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_3:FSR_once",
-    "index":0.03759398496240601
+    "index":0.03731343283582089
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_4",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_4:FSR_once",
-    "index":0.045112781954887216
+    "index":0.04477611940298507
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_5",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_5:FSR_once",
-    "index":0.05263157894736842
+    "index":0.05223880597014925
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_6",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_6:FSR_once",
-    "index":0.06015037593984962
+    "index":0.05970149253731343
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_7",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_7:FSR_once",
-    "index":0.06766917293233082
+    "index":0.06716417910447761
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_8",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_8:FSR_once",
-    "index":0.07518796992481203
+    "index":0.07462686567164178
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_9",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_9:FSR_once",
-    "index":0.08270676691729323
+    "index":0.08208955223880597
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_10",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_10:FSR_once",
-    "index":0.09022556390977443
+    "index":0.08955223880597014
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_11",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_11:FSR_once",
-    "index":0.09774436090225563
+    "index":0.09701492537313433
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_12",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_12:FSR_once",
-    "index":0.10526315789473684
+    "index":0.1044776119402985
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_13",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_13:FSR_once",
-    "index":0.11278195488721804
+    "index":0.11194029850746269
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_14",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_14:FSR_once",
-    "index":0.12030075187969924
+    "index":0.11940298507462686
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_15",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_15:FSR_once",
-    "index":0.12781954887218044
+    "index":0.12686567164179105
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_16",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_16:FSR_once",
-    "index":0.13533834586466165
+    "index":0.13432835820895522
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_17",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_17:FSR_once",
-    "index":0.14285714285714285
+    "index":0.1417910447761194
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_18",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_18:FSR_once",
-    "index":0.15037593984962405
+    "index":0.14925373134328357
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_19",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_19:FSR_once",
-    "index":0.15789473684210525
+    "index":0.15671641791044777
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_20",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_20:FSR_once",
-    "index":0.16541353383458646
+    "index":0.16417910447761194
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_21",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_21:FSR_once",
-    "index":0.17293233082706766
+    "index":0.17164179104477612
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_22",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_22:FSR_once",
-    "index":0.18045112781954886
+    "index":0.1791044776119403
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_23",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_23:FSR_once",
-    "index":0.18796992481203006
+    "index":0.1865671641791045
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_24",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_24:FSR_once",
-    "index":0.19548872180451127
+    "index":0.19402985074626866
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_25",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_25:FSR_once",
-    "index":0.20300751879699247
+    "index":0.20149253731343283
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_26",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_26:FSR_once",
-    "index":0.21052631578947367
+    "index":0.208955223880597
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_27",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_27:FSR_once",
-    "index":0.21804511278195488
+    "index":0.21641791044776118
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_28",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_28:FSR_once",
-    "index":0.22556390977443608
+    "index":0.22388059701492538
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_29",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_29:FSR_once",
-    "index":0.23308270676691728
+    "index":0.23134328358208955
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_30",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_30:FSR_once",
-    "index":0.24060150375939848
+    "index":0.23880597014925373
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_31",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_31:FSR_once",
-    "index":0.24812030075187969
+    "index":0.2462686567164179
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_32",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_32:FSR_once",
-    "index":0.2556390977443609
+    "index":0.2537313432835821
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_33",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_33:FSR_once",
-    "index":0.2631578947368421
+    "index":0.26119402985074625
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_34",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_34:FSR_once",
-    "index":0.2706766917293233
+    "index":0.26865671641791045
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_35",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_35:FSR_once",
-    "index":0.2781954887218045
+    "index":0.27611940298507465
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_36",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_36:FSR_once",
-    "index":0.2857142857142857
+    "index":0.2835820895522388
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_37",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_37:FSR_once",
-    "index":0.2932330827067669
+    "index":0.291044776119403
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_38",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_38:FSR_once",
-    "index":0.3007518796992481
+    "index":0.29850746268656714
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_39",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_39:FSR_once",
-    "index":0.3082706766917293
+    "index":0.30597014925373134
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_40",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_40:FSR_once",
-    "index":0.3157894736842105
+    "index":0.31343283582089554
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_41",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_41:FSR_once",
-    "index":0.3233082706766917
+    "index":0.3208955223880597
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_42",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_42:FSR_once",
-    "index":0.3308270676691729
+    "index":0.3283582089552239
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_43",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_43:FSR_once",
-    "index":0.3383458646616541
+    "index":0.3358208955223881
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_44",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_44:FSR_once",
-    "index":0.3458646616541353
+    "index":0.34328358208955223
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_45",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_45:FSR_once",
-    "index":0.3533834586466165
+    "index":0.35074626865671643
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_46",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_46:FSR_once",
-    "index":0.3609022556390977
+    "index":0.3582089552238806
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_47",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_47:FSR_once",
-    "index":0.3684210526315789
+    "index":0.3656716417910448
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_48",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_48:FSR_once",
-    "index":0.37593984962406013
+    "index":0.373134328358209
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_49",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_49:FSR_once",
-    "index":0.38345864661654133
+    "index":0.3805970149253731
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_50",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_50:FSR_once",
-    "index":0.39097744360902253
+    "index":0.3880597014925373
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_51",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_51:FSR_once",
-    "index":0.39849624060150374
+    "index":0.39552238805970147
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_52",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_52:FSR_once",
-    "index":0.40601503759398494
+    "index":0.40298507462686567
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_53",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_53:FSR_once",
-    "index":0.41353383458646614
+    "index":0.41044776119402987
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_54",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_54:FSR_once",
-    "index":0.42105263157894735
+    "index":0.417910447761194
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_55",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_55:FSR_once",
-    "index":0.42857142857142855
+    "index":0.4253731343283582
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_56",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_56:FSR_once",
-    "index":0.43609022556390975
+    "index":0.43283582089552236
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_57",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_57:FSR_once",
-    "index":0.44360902255639095
+    "index":0.44029850746268656
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_58",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_58:FSR_once",
-    "index":0.45112781954887216
+    "index":0.44776119402985076
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_59",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_59:FSR_once",
-    "index":0.45864661654135336
+    "index":0.4552238805970149
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_60",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_60:FSR_once",
-    "index":0.46616541353383456
+    "index":0.4626865671641791
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_61",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_61:FSR_once",
-    "index":0.47368421052631576
+    "index":0.4701492537313433
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_62",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_62:FSR_once",
-    "index":0.48120300751879697
+    "index":0.47761194029850745
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_63",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_63:FSR_once",
-    "index":0.48872180451127817
+    "index":0.48507462686567165
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_64",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_64:FSR_once",
-    "index":0.49624060150375937
+    "index":0.4925373134328358
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_65",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_65:FSR_once",
-    "index":0.5037593984962406
+    "index":0.5
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_66",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_66:FSR_once",
-    "index":0.5112781954887218
+    "index":0.5074626865671642
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_67",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_67:FSR_once",
-    "index":0.518796992481203
+    "index":0.5149253731343284
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_68",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_68:FSR_once",
-    "index":0.5263157894736842
+    "index":0.5223880597014925
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_69",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_69:FSR_once",
-    "index":0.5338345864661654
+    "index":0.5298507462686567
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_70",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_70:FSR_once",
-    "index":0.5413533834586466
+    "index":0.5373134328358209
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_71",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_71:FSR_once",
-    "index":0.5488721804511278
+    "index":0.5447761194029851
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_72",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_72:FSR_once",
-    "index":0.556390977443609
+    "index":0.5522388059701493
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_73",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_73:FSR_once",
-    "index":0.5639097744360902
+    "index":0.5597014925373134
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_74",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_74:FSR_once",
-    "index":0.5714285714285714
+    "index":0.5671641791044776
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_75",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_75:FSR_once",
-    "index":0.5789473684210527
+    "index":0.5746268656716418
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_76",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_76:FSR_once",
-    "index":0.5864661654135338
+    "index":0.582089552238806
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_77",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_77:FSR_once",
-    "index":0.5939849624060151
+    "index":0.5895522388059702
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_78",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_78:FSR_once",
-    "index":0.6015037593984962
+    "index":0.5970149253731343
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_79",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_79:FSR_once",
-    "index":0.6090225563909775
+    "index":0.6044776119402985
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_80",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_80:FSR_once",
-    "index":0.6165413533834586
+    "index":0.6119402985074627
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_81",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_81:FSR_once",
-    "index":0.6240601503759399
+    "index":0.6194029850746269
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_82",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_82:FSR_once",
-    "index":0.631578947368421
+    "index":0.6268656716417911
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_83",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_83:FSR_once",
-    "index":0.6390977443609023
+    "index":0.6343283582089553
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_84",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_84:FSR_once",
-    "index":0.6466165413533834
+    "index":0.6417910447761194
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_85",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_85:FSR_once",
-    "index":0.6541353383458647
+    "index":0.6492537313432836
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_86",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_86:FSR_once",
-    "index":0.6616541353383458
+    "index":0.6567164179104478
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_87",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_87:FSR_once",
-    "index":0.6691729323308271
+    "index":0.664179104477612
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_88",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_88:FSR_once",
-    "index":0.6766917293233082
+    "index":0.6716417910447762
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_89",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_89:FSR_once",
-    "index":0.6842105263157895
+    "index":0.6791044776119403
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_90",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_90:FSR_once",
-    "index":0.6917293233082706
+    "index":0.6865671641791045
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_91",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_91:FSR_once",
-    "index":0.6992481203007519
+    "index":0.6940298507462687
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_92",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_92:FSR_once",
-    "index":0.706766917293233
+    "index":0.7014925373134329
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_93",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_93:FSR_once",
-    "index":0.7142857142857143
+    "index":0.7089552238805971
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_94",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_94:FSR_once",
-    "index":0.7218045112781954
+    "index":0.7164179104477612
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_95",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_95:FSR_once",
-    "index":0.7293233082706767
+    "index":0.7238805970149254
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_96",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_96:FSR_once",
-    "index":0.7368421052631579
+    "index":0.7313432835820896
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_97",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_97:FSR_once",
-    "index":0.7443609022556391
+    "index":0.7388059701492538
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_98",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_98:FSR_once",
-    "index":0.7518796992481203
+    "index":0.746268656716418
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_99",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_99:FSR_once",
-    "index":0.7593984962406015
+    "index":0.753731343283582
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_100",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_100:FSR_once",
-    "index":0.7669172932330827
+    "index":0.7611940298507462
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_101",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_101:FSR_once",
-    "index":0.7744360902255639
+    "index":0.7686567164179104
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_102",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_102:FSR_once",
-    "index":0.7819548872180451
+    "index":0.7761194029850746
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_103",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_103:FSR_once",
-    "index":0.7894736842105263
+    "index":0.7835820895522388
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_104",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_104:FSR_once",
-    "index":0.7969924812030075
+    "index":0.7910447761194029
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_105",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_105:FSR_once",
-    "index":0.8045112781954887
+    "index":0.7985074626865671
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_106",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_106:FSR_once",
-    "index":0.8120300751879699
+    "index":0.8059701492537313
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_107",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_107:FSR_once",
-    "index":0.8195488721804511
+    "index":0.8134328358208955
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_108",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_108:FSR_once",
-    "index":0.8270676691729323
+    "index":0.8208955223880597
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_109",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_109:FSR_once",
-    "index":0.8345864661654135
+    "index":0.8283582089552238
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_110",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_110:FSR_once",
-    "index":0.8421052631578947
+    "index":0.835820895522388
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_111",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_111:FSR_once",
-    "index":0.849624060150376
+    "index":0.8432835820895522
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_112",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_112:FSR_once",
-    "index":0.8571428571428571
+    "index":0.8507462686567164
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_113",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_113:FSR_once",
-    "index":0.8646616541353384
+    "index":0.8582089552238806
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_114",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_114:FSR_once",
-    "index":0.8721804511278195
+    "index":0.8656716417910447
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_115",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_115:FSR_once",
-    "index":0.8796992481203008
+    "index":0.8731343283582089
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_116",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_116:FSR_once",
-    "index":0.8872180451127819
+    "index":0.8805970149253731
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_117",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_117:FSR_once",
-    "index":0.8947368421052632
+    "index":0.8880597014925373
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_118",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_118:FSR_once",
-    "index":0.9022556390977443
+    "index":0.8955223880597015
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_119",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_119:FSR_once",
-    "index":0.9097744360902256
+    "index":0.9029850746268657
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_120",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_120:FSR_once",
-    "index":0.9172932330827067
+    "index":0.9104477611940298
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_121",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_121:FSR_once",
-    "index":0.924812030075188
+    "index":0.917910447761194
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_122",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_122:FSR_once",
-    "index":0.9323308270676691
+    "index":0.9253731343283582
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_123",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_123:FSR_once",
-    "index":0.9398496240601504
+    "index":0.9328358208955224
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_124",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_124:FSR_once",
-    "index":0.9473684210526315
+    "index":0.9402985074626866
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_125",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_125:FSR_once",
-    "index":0.9548872180451128
+    "index":0.9477611940298507
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_126",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_126:FSR_once",
-    "index":0.9624060150375939
+    "index":0.9552238805970149
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|FSR_once_127",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/FSR_128:FSR_640/once_127:FSR_once",
-    "index":0.9699248120300752
+    "index":0.9626865671641791
   },
   {
     "class":"firrtl.transforms.DedupedResult",
     "original":"~initialization_tinyJAMBU_once|tick_1",
     "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/inst_FSR:FSR_N_Reg/edge_detect:tick",
-    "index":0.9849624060150376
+    "index":0.9776119402985075
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~initialization_tinyJAMBU_once|tick_2",
+    "duplicate":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once/init_once_edge:tick",
+    "index":0.9925373134328358
   },
   {
     "class":"firrtl.EmitCircuitAnnotation",
@@ -799,9 +805,8 @@
     "sink":"~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once>io_single_initialization_out",
     "sources":[
       "~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once>io_start",
-      "~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once>io_nonce",
       "~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once>io_key",
-      "~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once>io_state"
+      "~initialization_tinyJAMBU_once|initialization_tinyJAMBU_once>io_nonce"
     ]
   }
 ]

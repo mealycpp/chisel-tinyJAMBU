@@ -279,6 +279,20 @@ class initialization_tinyJAMBU() extends Module {
       done := 0.U
     }
 }
+class process_partial_once() extends Module {
+  val io = IO(new Bundle {
+    val ad = Input(UInt(32.W))
+    val adlen_left = Input(UInt(3.W))
+    val state = Input(UInt(128.W))
+    val key = Input(UInt(128.W))
+    val start = Input(UInt(1.W))
+  })
+  val frame = Module(new whole_frame_bit())
+  frame.io.in := 3.U
+  frame.io.state := io.state
+  frame.io.out
+  
+}
 // processes 32 bits
 class process_AD_once() extends Module {
   val io = IO(new Bundle {
@@ -291,9 +305,9 @@ class process_AD_once() extends Module {
   })
   val frame_bit_inst = Module(new whole_frame_bit())
   val frame_state_out = Wire(UInt(128.W))
-  frame_bit_inst.io.in(3.U)
+  frame_bit_inst.io.in := 3.U
   frame_bit_inst.io.state := io.state
-  frame_bit_inst.io.out := frame_state_out
+  frame_state_out := frame_bit_inst.io.out
 
   val inst_FSR = Module(new FSR_N_Reg())
   val fsr_done = Wire(UInt(1.W))
@@ -303,27 +317,94 @@ class process_AD_once() extends Module {
   fsr_done := inst_FSR.io.done
   inst_FSR.io.key := io.key
   inst_FSR.io.start := fsr_start
-  inst_FSR.io.state := fsr_state_out
+  inst_FSR.io.state := frame_state_out
+  inst_FSR.io.steps := 5.U
   fsr_state_out := inst_FSR.io.state_out
 
   val tick_gen = Module(new tick())
   val start_tick = Wire(UInt(1.W))
   tick_gen.io.in := io.start
-  tick_gen.io.out_tick := start_tick
-
-  val temp_state = Wire(UInt(32.W))
+  start_tick := tick_gen.io.out_tick
 
   // start whole module
   // some wires may not be needed, kept for readability
-  when (start_tick === 1.U) {
+  when(start_tick === 1.U) {
     fsr_start := 1.U
     io.done := 0.U
+    io.state_out := 0.U
   }.elsewhen(fsr_done === 1.U) {
     fsr_start := 0.U
     // 32 bit directions might not be needed, but used here just in case
-    // temp_state not needed; kept for readability
-    temp_state := fsr_state_out(127,96) ^ io.ad(31,0)
-    io.state_out := temp_state(31,0) ## fsr_state_out(95,0)
+    io.state_out := (fsr_state_out(127, 96) ^ io
+      .ad(31, 0)) ## fsr_state_out(95, 0)
+    io.done := 1.U
+  }.otherwise {
+    fsr_start := 0.U
+    io.state_out := 0.U
+    io.done := 0.U
+  }
+}
+// assume there's a fifo inputting to ad
+// also someone should provide some info about whether there's a partial block
+
+// adlen is how many 8 bit chunks of data
+// let this module control the fifo for ad. The fifo will read out data when requested and it should happen adlen / 4 times. For the last read, if it's a partial block (adlen % 4 == 1) then use the partial block operation
+// software will load data into the fifo
+// since there are fifos, they can be done in parallel for message and ad with a mux to choose which
+// make the ad automatic; automatically take data into process_ad
+// each chunk is a ratio, total amount is capacity - make it 16; keep in mind that the whole system is at same clock speed, so loading will be one at a time
+
+class process_AD() extends Module {
+  val io = IO(new Bundle {
+    val state = Input(UInt(128.W))
+    val key = Input(UInt(128.W))
+    val ad = Input(UInt(32.W))
+    val adlen = Input(UInt(10.W))
+    val fifo_ad_in = Input(UInt(1.W))
+    val request_fifo = Output(UInt(1.W))
+    val start = Input(UInt(1.W))
+    val done = Output(UInt(1.W))
+    val state_out = Output(UInt(128.W))
+  })
+  val start_process_AD = Module(new tick())
+  start_process_AD.io.in := io.start
+  // start_process_AD.io.out_tick
+  // repeat process_AD_once() while there is data
+  val ad_count = Reg(UInt(10.W))
+  ad_count := io.adlen
+
+  val process_once = Module(new process_AD_once())
+  val process_state_in = Reg(UInt(128.W))
+  process_state_in := io.state
+  val process_state_out = Wire(UInt(128.W))
+  process_once.io.ad := io.ad
+  process_once.io.key := io.key
+  process_once.io.start := start_process_AD.io.out_tick
+  process_once.io.state := process_state_in
+  process_state_out := process_once.io.state_out
+  when(ad_count > 4.U) {
+    ad_count := ad_count - 4.U
+  }.elsewhen (ad_count < 4.U) {
+    // perform partial block:
+    
+    // frame bit
+
+    // xor rest with ad
+    process_state_out
+
+    // xor number of bytes
+  } 
+  .otherwise {
+
+  }
+
+  when (process_once.io.done === 1.U) {
+    process_state_in := process_state_out
+    // request new ad
+    // 
+    io.request_fifo := 1.U
+  }.otherwise {
+
   }
 }
 class FSR_N_Reg() extends Module {
@@ -381,6 +462,10 @@ object FSR_640Main extends App {
   )
   emitVerilog(
     new init_key(),
+    Array("--target-dir", "generated/whole")
+  )
+  emitVerilog(
+    new process_AD_once(),
     Array("--target-dir", "generated/whole")
   )
 }

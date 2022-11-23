@@ -4,15 +4,15 @@ circuit initialization_tinyJAMBU_once :
     input reset : Reset
     output io : { flip in : UInt<3>, flip state : UInt<3>, state_out : UInt<3>}
 
-    node _io_state_out_T = bits(io.state, 0, 0) @[FSR_640.scala 55:28]
-    node _io_state_out_T_1 = bits(io.in, 0, 0) @[FSR_640.scala 55:39]
+    node _io_state_out_T = bits(io.state, 2, 2) @[FSR_640.scala 55:28]
+    node _io_state_out_T_1 = bits(io.in, 2, 2) @[FSR_640.scala 55:39]
     node _io_state_out_T_2 = xor(_io_state_out_T, _io_state_out_T_1) @[FSR_640.scala 55:32]
     node _io_state_out_T_3 = bits(io.state, 1, 1) @[FSR_640.scala 55:56]
     node _io_state_out_T_4 = bits(io.in, 1, 1) @[FSR_640.scala 55:67]
     node _io_state_out_T_5 = xor(_io_state_out_T_3, _io_state_out_T_4) @[FSR_640.scala 55:60]
     node _io_state_out_T_6 = cat(_io_state_out_T_2, _io_state_out_T_5) @[FSR_640.scala 55:44]
-    node _io_state_out_T_7 = bits(io.state, 2, 2) @[FSR_640.scala 56:11]
-    node _io_state_out_T_8 = bits(io.in, 2, 2) @[FSR_640.scala 56:22]
+    node _io_state_out_T_7 = bits(io.state, 0, 0) @[FSR_640.scala 56:11]
+    node _io_state_out_T_8 = bits(io.in, 0, 0) @[FSR_640.scala 56:22]
     node _io_state_out_T_9 = xor(_io_state_out_T_7, _io_state_out_T_8) @[FSR_640.scala 56:15]
     node _io_state_out_T_10 = cat(_io_state_out_T_6, _io_state_out_T_9) @[FSR_640.scala 55:72]
     io.state_out <= _io_state_out_T_10 @[FSR_640.scala 55:16]
@@ -3512,101 +3512,120 @@ circuit initialization_tinyJAMBU_once :
     output io : { flip state : UInt<128>, flip key : UInt<128>, flip steps : UInt<10>, flip start : UInt<1>, state_out : UInt<128>, done : UInt<1>}
 
     reg temp_state : UInt<128>, clock with :
-      reset => (UInt<1>("h0"), temp_state) @[FSR_640.scala 229:23]
-    wire temp_state_out : UInt<128> @[FSR_640.scala 230:28]
+      reset => (UInt<1>("h0"), temp_state) @[FSR_640.scala 342:23]
+    wire temp_state_out : UInt<128> @[FSR_640.scala 343:28]
     reg temp_count : UInt<10>, clock with :
-      reset => (UInt<1>("h0"), temp_count) @[FSR_640.scala 231:23]
-    inst FSR_128 of FSR_640 @[FSR_640.scala 233:23]
+      reset => (UInt<1>("h0"), temp_count) @[FSR_640.scala 344:23]
+    inst FSR_128 of FSR_640 @[FSR_640.scala 346:23]
     FSR_128.clock <= clock
     FSR_128.reset <= reset
-    inst edge_detect of tick_1 @[FSR_640.scala 234:27]
+    inst edge_detect of tick_1 @[FSR_640.scala 347:27]
     edge_detect.clock <= clock
     edge_detect.reset <= reset
-    edge_detect.io.in <= io.start @[FSR_640.scala 235:21]
-    FSR_128.io.key <= io.key @[FSR_640.scala 237:18]
-    FSR_128.io.state <= temp_state @[FSR_640.scala 238:20]
-    temp_state_out <= temp_state @[FSR_640.scala 239:18]
-    temp_count <= io.steps @[FSR_640.scala 243:14]
-    io.state_out <= temp_state_out @[FSR_640.scala 244:16]
+    edge_detect.io.in <= io.start @[FSR_640.scala 348:21]
+    FSR_128.io.key <= io.key @[FSR_640.scala 350:18]
+    FSR_128.io.state <= temp_state @[FSR_640.scala 351:20]
+    temp_state_out <= temp_state @[FSR_640.scala 352:18]
+    io.state_out <= temp_state_out @[FSR_640.scala 356:16]
     reg io_done_REG : UInt, clock with :
-      reset => (reset, UInt<1>("h0")) @[FSR_640.scala 245:21]
-    io.done <= io_done_REG @[FSR_640.scala 245:11]
-    temp_state <= io.state @[FSR_640.scala 246:14]
-    node _T = eq(edge_detect.io.out_tick, UInt<1>("h1")) @[FSR_640.scala 247:32]
-    when _T : @[FSR_640.scala 247:41]
-      io.done <= UInt<1>("h0") @[FSR_640.scala 248:13]
-      temp_state <= io.state @[FSR_640.scala 249:16]
-      temp_state_out <= temp_state @[FSR_640.scala 250:20]
-      temp_count <= io.steps @[FSR_640.scala 251:16]
+      reset => (reset, UInt<1>("h0")) @[FSR_640.scala 357:21]
+    io.done <= io_done_REG @[FSR_640.scala 357:11]
+    node _T = eq(edge_detect.io.out_tick, UInt<1>("h1")) @[FSR_640.scala 358:32]
+    when _T : @[FSR_640.scala 358:41]
+      io.done <= UInt<1>("h0") @[FSR_640.scala 359:13]
+      temp_state <= io.state @[FSR_640.scala 360:16]
+      temp_state_out <= temp_state @[FSR_640.scala 361:20]
+      temp_count <= io.steps @[FSR_640.scala 362:16]
     else :
-      node _T_1 = gt(temp_count, UInt<1>("h0")) @[FSR_640.scala 253:25]
-      when _T_1 : @[FSR_640.scala 253:32]
-        temp_state <= temp_state_out @[FSR_640.scala 254:16]
-        temp_state_out <= FSR_128.io.state_out @[FSR_640.scala 255:20]
-        node _temp_count_T = sub(temp_count, UInt<1>("h1")) @[FSR_640.scala 258:30]
-        node _temp_count_T_1 = tail(_temp_count_T, 1) @[FSR_640.scala 258:30]
-        temp_count <= _temp_count_T_1 @[FSR_640.scala 258:16]
+      node _T_1 = gt(temp_count, UInt<1>("h0")) @[FSR_640.scala 364:25]
+      when _T_1 : @[FSR_640.scala 364:32]
+        temp_state <= temp_state_out @[FSR_640.scala 365:16]
+        temp_state_out <= FSR_128.io.state_out @[FSR_640.scala 366:20]
+        node _temp_count_T = sub(temp_count, UInt<1>("h1")) @[FSR_640.scala 367:30]
+        node _temp_count_T_1 = tail(_temp_count_T, 1) @[FSR_640.scala 367:30]
+        temp_count <= _temp_count_T_1 @[FSR_640.scala 367:16]
       else :
-        node _T_2 = eq(temp_count, UInt<1>("h0")) @[FSR_640.scala 260:25]
-        when _T_2 : @[FSR_640.scala 260:34]
-          io.done <= UInt<1>("h1") @[FSR_640.scala 261:13]
+        node _T_2 = eq(temp_count, UInt<1>("h0")) @[FSR_640.scala 369:25]
+        when _T_2 : @[FSR_640.scala 369:34]
+          io.done <= UInt<1>("h1") @[FSR_640.scala 370:13]
+
+  module tick_2 :
+    input clock : Clock
+    input reset : Reset
+    output io : { flip in : UInt<1>, out_tick : UInt<1>}
+
+    reg temp_reg : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), temp_reg) @[FSR_640.scala 44:21]
+    temp_reg <= io.in @[FSR_640.scala 45:12]
+    node _io_out_tick_T = not(temp_reg) @[FSR_640.scala 46:26]
+    node _io_out_tick_T_1 = and(io.in, _io_out_tick_T) @[FSR_640.scala 46:24]
+    io.out_tick <= _io_out_tick_T_1 @[FSR_640.scala 46:15]
 
   module initialization_tinyJAMBU_once :
     input clock : Clock
     input reset : UInt<1>
     output io : { flip key : UInt<128>, flip state : UInt<128>, flip start : UInt<1>, flip nonce : UInt<32>, single_initialization_out : UInt<128>, done : UInt<1>}
 
-    wire state : UInt<128> @[FSR_640.scala 98:19]
-    state <= io.state @[FSR_640.scala 99:9]
-    wire state_out : UInt<128> @[FSR_640.scala 100:23]
-    reg start_FSR : UInt<1>, clock with :
-      reset => (UInt<1>("h0"), start_FSR) @[FSR_640.scala 102:22]
-    wire temp_nonce_state : UInt<32> @[FSR_640.scala 103:30]
-    wire output_of_whole_frame : UInt<128> @[FSR_640.scala 105:35]
-    start_FSR <= UInt<1>("h0") @[FSR_640.scala 106:13]
-    inst single_frame_bit of frame_bit_init @[FSR_640.scala 109:32]
+    wire state : UInt<128> @[FSR_640.scala 116:19]
+    state <= io.state @[FSR_640.scala 117:9]
+    wire state_out : UInt<128> @[FSR_640.scala 118:23]
+    wire temp_nonce_state : UInt<32> @[FSR_640.scala 120:30]
+    wire output_of_whole_frame : UInt<128> @[FSR_640.scala 123:35]
+    inst single_frame_bit of frame_bit_init @[FSR_640.scala 124:32]
     single_frame_bit.clock <= clock
     single_frame_bit.reset <= reset
-    wire output_of_3_bit_frame : UInt<3> @[FSR_640.scala 110:35]
-    single_frame_bit.io.in <= UInt<1>("h1") @[FSR_640.scala 111:26]
-    node _single_frame_bit_io_state_T = bits(state, 38, 36) @[FSR_640.scala 112:37]
-    single_frame_bit.io.state <= _single_frame_bit_io_state_T @[FSR_640.scala 112:29]
-    output_of_3_bit_frame <= single_frame_bit.io.state_out @[FSR_640.scala 113:25]
-    node _output_of_whole_frame_T = bits(state, 127, 39) @[FSR_640.scala 115:33]
-    node _output_of_whole_frame_T_1 = cat(_output_of_whole_frame_T, output_of_3_bit_frame) @[FSR_640.scala 115:43]
-    node _output_of_whole_frame_T_2 = bits(state, 35, 0) @[FSR_640.scala 115:76]
-    node _output_of_whole_frame_T_3 = cat(_output_of_whole_frame_T_1, _output_of_whole_frame_T_2) @[FSR_640.scala 115:68]
-    output_of_whole_frame <= _output_of_whole_frame_T_3 @[FSR_640.scala 115:25]
-    inst sig_edge of tick @[FSR_640.scala 120:24]
-    sig_edge.clock <= clock
-    sig_edge.reset <= reset
-    wire start_sig : UInt<1> @[FSR_640.scala 121:23]
-    sig_edge.io.in <= start_FSR @[FSR_640.scala 122:18]
-    start_sig <= sig_edge.io.out_tick @[FSR_640.scala 123:13]
-    inst inst_FSR of FSR_N_Reg @[FSR_640.scala 125:24]
+    wire output_of_3_bit_frame : UInt<3> @[FSR_640.scala 125:35]
+    single_frame_bit.io.in <= UInt<1>("h1") @[FSR_640.scala 126:26]
+    node _single_frame_bit_io_state_T = bits(state, 38, 36) @[FSR_640.scala 127:37]
+    single_frame_bit.io.state <= _single_frame_bit_io_state_T @[FSR_640.scala 127:29]
+    output_of_3_bit_frame <= single_frame_bit.io.state_out @[FSR_640.scala 128:25]
+    node _output_of_whole_frame_T = bits(state, 127, 39) @[FSR_640.scala 130:33]
+    node _output_of_whole_frame_T_1 = bits(output_of_3_bit_frame, 2, 0) @[FSR_640.scala 130:67]
+    node _output_of_whole_frame_T_2 = cat(_output_of_whole_frame_T, _output_of_whole_frame_T_1) @[FSR_640.scala 130:43]
+    node _output_of_whole_frame_T_3 = bits(state, 35, 0) @[FSR_640.scala 133:13]
+    node _output_of_whole_frame_T_4 = cat(_output_of_whole_frame_T_2, _output_of_whole_frame_T_3) @[FSR_640.scala 133:5]
+    output_of_whole_frame <= _output_of_whole_frame_T_4 @[FSR_640.scala 130:25]
+    reg start_FSR : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), start_FSR) @[FSR_640.scala 139:22]
+    start_FSR <= UInt<1>("h0") @[FSR_640.scala 140:13]
+    inst fsr_sig_edge of tick @[FSR_640.scala 141:28]
+    fsr_sig_edge.clock <= clock
+    fsr_sig_edge.reset <= reset
+    wire start_sig : UInt<1> @[FSR_640.scala 142:23]
+    fsr_sig_edge.io.in <= start_FSR @[FSR_640.scala 143:22]
+    start_sig <= fsr_sig_edge.io.out_tick @[FSR_640.scala 144:13]
+    inst inst_FSR of FSR_N_Reg @[FSR_640.scala 146:24]
     inst_FSR.clock <= clock
     inst_FSR.reset <= reset
-    inst_FSR.io.start <= start_sig @[FSR_640.scala 126:21]
-    state_out <= inst_FSR.io.state_out @[FSR_640.scala 127:13]
-    inst_FSR.io.state <= state @[FSR_640.scala 128:21]
-    inst_FSR.io.key <= io.key @[FSR_640.scala 129:19]
-    inst_FSR.io.steps <= UInt<3>("h6") @[FSR_640.scala 130:21]
-    io.single_initialization_out <= UInt<1>("h0") @[FSR_640.scala 134:32]
-    temp_nonce_state <= UInt<1>("h0") @[FSR_640.scala 135:20]
-    io.done <= UInt<1>("h0") @[FSR_640.scala 136:11]
-    node _T = eq(io.start, UInt<1>("h1")) @[FSR_640.scala 139:17]
-    when _T : @[FSR_640.scala 139:26]
-      start_FSR <= UInt<1>("h1") @[FSR_640.scala 140:15]
-      io.done <= UInt<1>("h0") @[FSR_640.scala 141:13]
+    inst_FSR.io.start <= start_sig @[FSR_640.scala 147:21]
+    state_out <= inst_FSR.io.state_out @[FSR_640.scala 148:13]
+    inst_FSR.io.state <= output_of_whole_frame @[FSR_640.scala 149:21]
+    inst_FSR.io.key <= io.key @[FSR_640.scala 150:19]
+    inst_FSR.io.steps <= UInt<3>("h5") @[FSR_640.scala 151:21]
+    inst init_once_edge of tick_2 @[FSR_640.scala 153:30]
+    init_once_edge.clock <= clock
+    init_once_edge.reset <= reset
+    wire start_init : UInt<1> @[FSR_640.scala 154:24]
+    init_once_edge.io.in <= io.start @[FSR_640.scala 155:24]
+    start_init <= init_once_edge.io.out_tick @[FSR_640.scala 156:14]
+    io.single_initialization_out <= UInt<1>("h0") @[FSR_640.scala 159:32]
+    temp_nonce_state <= UInt<1>("h0") @[FSR_640.scala 160:20]
+    io.done <= UInt<1>("h0") @[FSR_640.scala 161:11]
+    node _T = eq(start_init, UInt<1>("h1")) @[FSR_640.scala 164:19]
+    when _T : @[FSR_640.scala 164:28]
+      start_FSR <= UInt<1>("h1") @[FSR_640.scala 165:15]
+      io.done <= UInt<1>("h0") @[FSR_640.scala 166:13]
     else :
-      node _T_1 = eq(inst_FSR.io.done, UInt<1>("h1")) @[FSR_640.scala 142:31]
-      when _T_1 : @[FSR_640.scala 142:40]
-        start_FSR <= UInt<1>("h0") @[FSR_640.scala 145:15]
-        node _temp_nonce_state_T = bits(output_of_whole_frame, 127, 96) @[FSR_640.scala 148:46]
-        node _temp_nonce_state_T_1 = xor(_temp_nonce_state_T, io.nonce) @[FSR_640.scala 148:56]
-        temp_nonce_state <= _temp_nonce_state_T_1 @[FSR_640.scala 148:22]
-        node _io_single_initialization_out_T = bits(state_out, 95, 0) @[FSR_640.scala 151:66]
-        node _io_single_initialization_out_T_1 = cat(temp_nonce_state, _io_single_initialization_out_T) @[FSR_640.scala 151:54]
-        io.single_initialization_out <= _io_single_initialization_out_T_1 @[FSR_640.scala 151:34]
-        io.done <= UInt<1>("h1") @[FSR_640.scala 152:13]
+      node _T_1 = eq(inst_FSR.io.done, UInt<1>("h1")) @[FSR_640.scala 167:31]
+      when _T_1 : @[FSR_640.scala 167:40]
+        start_FSR <= UInt<1>("h0") @[FSR_640.scala 170:15]
+        node _temp_nonce_state_T = bits(state_out, 127, 96) @[FSR_640.scala 173:34]
+        node _temp_nonce_state_T_1 = bits(io.nonce, 31, 0) @[FSR_640.scala 173:54]
+        node _temp_nonce_state_T_2 = xor(_temp_nonce_state_T, _temp_nonce_state_T_1) @[FSR_640.scala 173:44]
+        temp_nonce_state <= _temp_nonce_state_T_2 @[FSR_640.scala 173:22]
+        node _io_single_initialization_out_T = bits(temp_nonce_state, 31, 0) @[FSR_640.scala 176:53]
+        node _io_single_initialization_out_T_1 = bits(state_out, 95, 0) @[FSR_640.scala 176:73]
+        node _io_single_initialization_out_T_2 = cat(_io_single_initialization_out_T, _io_single_initialization_out_T_1) @[FSR_640.scala 176:61]
+        io.single_initialization_out <= _io_single_initialization_out_T_2 @[FSR_640.scala 176:34]
+        io.done <= UInt<1>("h1") @[FSR_640.scala 177:13]
 

@@ -14,8 +14,25 @@ import org.scalatest.flatspec.AnyFlatSpec
 class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
   // val key = BigInt("0123456789ABCDEF", 16)
   val key = BigInt("0F0E0D0C0B0A09080706050403020100", 16)
+  val nonce = BigInt("0B0A09080706050403020100", 16)
   println("key is: ")
   println(key)
+  "Process_ad_once" should "be correct" in {
+    test(new process_AD_once()) {dut =>
+      // in C, this is simulating an adlength of 4 (32 bits) with state of 0
+      // ad is also 0
+      dut.io.ad.poke(0)
+      dut.io.key.poke(key)
+      dut.io.state.poke(0)
+      dut.io.start.poke(1)
+      for (i <- 1 to 20) {
+        dut.clock.step()
+        println(dut.io.done.peek().litValue)
+      }
+      dut.io.done.expect(1)
+      dut.io.state_out.expect(BigInt("6C8A71DA04A3341F64D2A3C9CF009E65", 16))
+    }
+  }
   "init_key" should "work" in {
     test(new init_key()) { dut =>
       dut.io.key.poke(key)
@@ -395,7 +412,6 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
     //   dut.io.state_out.expect(BigInt("c5c6eda1546fd8c05b6186c6e749f5ed", 16))
     // }
   }
-  val nonce = BigInt("0B0A09080706050403020100", 16)
   "Init_once" should "work" in {
     test(new initialization_tinyJAMBU_once()) { dut =>
       dut.io.key.poke(key)
@@ -512,4 +528,5 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.state_out.expect(BigInt("EA5DC9488E487009BFB6ADC697CF5A5B", 16))
     }
   }
+
 }
