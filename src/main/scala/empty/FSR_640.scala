@@ -350,7 +350,7 @@ class process_partial_once() extends Module {
         io.state_out := 0.U
         io.done := 0.U
       }
-      io.done := 1.U
+    io.done := 1.U
   }.otherwise {
     number_xor := 0.U
     io.state_out := 0.U
@@ -418,18 +418,41 @@ class process_AD_once() extends Module {
 // make the ad automatic; automatically take data into process_ad
 // each chunk is a ratio, total amount is capacity - make it 16; keep in mind that the whole system is at same clock speed, so loading will be one at a time
 
+// This has the process once modules
+// it will connect the appropriate data to them
+// it will contain a fifo for data
+// this will work until ad_len is 0
+
+// will the fifo be inside or outside this modulead_fifo
+// who gives out the ready signal
+// how to resolve having adlen and a fifo - they provide the same info
+// how to resolve the queue's ready with the module's ready
+// how to handle allowing pushing into queue
+
+// main problem is when one cycle of process_ad happens, how to get or wait for more data for the next cycle
+
+// keep getting back to the problem of how once is different than this module
+// why not just give the start signal 3 times for the once modules?
+
+// right now, the architecture is like this: 2 modules for performing one iteration
+// ad coming in the form of a fifo
+// when the queue is empty, put the result out
+
 class process_AD() extends Module {
   val io = IO(new Bundle {
     val state = Input(UInt(128.W))
     val key = Input(UInt(128.W))
-    val ad = Input(UInt(32.W))
+    val ad = Decoupled(UInt(32.W))
     val adlen = Input(UInt(10.W))
     val fifo_ad_in = Input(UInt(1.W))
-    val request_fifo = Output(UInt(1.W))
     val start = Input(UInt(1.W))
     val done = Output(UInt(1.W))
     val state_out = Output(UInt(128.W))
   })
+// https://stackoverflow.com/questions/41122480/chisel-language-how-to-best-use-queues
+  // change depth from 2 to 16
+  val ad_fifo = Queue(io.ad, 16)
+
   val start_process_AD = Module(new tick())
   start_process_AD.io.in := io.start
   // start_process_AD.io.out_tick
@@ -441,39 +464,304 @@ class process_AD() extends Module {
   val process_state_in = Reg(UInt(128.W))
   process_state_in := io.state
   val process_state_out = Wire(UInt(128.W))
-  process_once.io.ad := io.ad
+  process_once.io.ad := ad_fifo.deq()
   process_once.io.key := io.key
   process_once.io.start := start_process_AD.io.out_tick
   process_once.io.state := process_state_in
   process_state_out := process_once.io.state_out
+  process_once.io.start := 0.U
 
-  val inst_partial = Module(new process_partial_once())
+  val process_partial = Module(new process_partial_once())
+  val process_partial_state_in = Wire(UInt(128.W))
+  val process_partial_state_out = Wire(UInt(128.W))
+  process_partial.io.ad := io.ad
+  process_partial.io.start := 0.U
+  process_partial.io.key := io.key
+  process_partial.io.state := process_partial_state_in
+  process_partial_state_out := process_partial.io.state_out
+  process_partial.io.ad := 0.U
+  process_partial.io.adlen_left := 0.U
 
-  when(ad_count > 4.U) {
-    ad_count := ad_count - 4.U
-  }.elsewhen(ad_count < 4.U) {
-    // perform partial block:
-    inst_partial.io.ad := io.ad
-    inst_partial.io.adlen_left := ad_count
-    inst_partial.io.state := process_state_out
-    inst_partial.io.start := 1.U
-    // frame bit
-
-    // xor rest with ad
-    process_state_out
-
-    // xor number of bytes
+  when(start_process_AD.io.out_tick === 1.U) {
+    // start process_once
+    // depending on partial or not, connect the appropriate values to the modules
+    when(ad_count >= 4.U) {
+      process_state_in := process_state_out
+      ad_count := ad_count - 4.U
+      process_once.io.start := 1.U
+    }.elsewhen(ad_count < 4.U) {
+      // perform partial block:
+      process_partial.io.adlen_left := ad_count
+      // assigning input and output from process_state_out will probably cause issues
+      process_partial.io.state := process_state_out
+      process_state_out := process_partial.io.state_out
+      ad_count := 0.U
+      process_partial.io.start := 1.U
+    }.otherwise {
+      // reset start signals when processing
+      process_once.io.start := 0.U
+      process_partial.io.start := 0.U
+    }
   }.otherwise {}
+}
 
-  when (inst_partial.io.done === 1.U) {
+class encrypt_once() extends Module {
+  val io = IO(new Bundle {
+    val state = Input(UInt(128.W))
+    val key = Input(UInt(128.W))
+    val state_out = Output(UInt(128.W))
+    val message = Input(UInt(32.W))
+    val ciphertext_out = Output(UInt(32.W))
+    val start = Input(UInt(1.W))
+    val done = Output(UInt(1.W))
+  })
+  val inst_frame = Module(new frame_bit_init())
+  val frame_out = Wire(UInt(128.W))
+  inst_frame.io.in := 5.U
+  inst_frame.io.state := io.state
+  frame_out := inst_frame.io.state_out
+  val tick_gen = Module(new tick())
+  tick_gen.io.in := io.start
 
+  val inst_fsr = Module(new FSR_N_Reg())
+  inst_fsr.io.key := io.key
+  inst_fsr.io.state := frame_out
+  inst_fsr.io.steps := 8.U
+  inst_fsr.io.start := tick_gen.io.out_tick
+  val temp_partial_state = Wire(UInt(32.W))
+
+  when(inst_fsr.io.done === 1.U) {
+    // The state_out value should be "stored" in a wire after xoring with the message, but since they don't overlap, they don't need to come from a single wire
+    temp_partial_state := inst_fsr.io.state_out(127, 96) ^ io.message(31, 0)
+    io.ciphertext_out := inst_fsr.io.state_out(95, 64) ^ io.message(31, 0)
+    io.state_out := temp_partial_state(127, 96) ## inst_fsr.io.state_out(
+      95,
+      0
+    )
+    io.done := 1.U
   }
-  when(process_once.io.done === 1.U) {
-    process_state_in := process_state_out
-    // request new ad
-    //
-    io.request_fifo := 1.U
-  }.otherwise {}
+    .otherwise {
+      inst_fsr.io.start := 0.U
+      temp_partial_state := 0.U
+    }
+}
+
+class partial_encrypt_once() extends Module {
+  val io = IO(new Bundle {
+    val state = Input(UInt(128.W))
+    val key = Input(UInt(128.W))
+    val state_out = Output(UInt(128.W))
+    val message = Input(UInt(32.W))
+    val ciphertext_out = Output(UInt(32.W))
+    val start = Input(UInt(1.W))
+    val done = Output(UInt(1.W))
+    val mlen_left = Input(UInt(3.W))
+  })
+  // lines below should be converted to a function or something since they are reused in basically all modules
+  val inst_frame = Module(new frame_bit_init())
+  val frame_out = Wire(UInt(128.W))
+  inst_frame.io.in := 5.U
+  inst_frame.io.state := io.state
+  frame_out := inst_frame.io.state_out
+  val tick_gen = Module(new tick())
+  tick_gen.io.in := io.start
+  val inst_fsr = Module(new FSR_N_Reg())
+  inst_fsr.io.key := io.key
+  inst_fsr.io.state := frame_out
+  inst_fsr.io.steps := 8.U
+  inst_fsr.io.start := tick_gen.io.out_tick
+  val temp_partial_state = Wire(UInt(32.W))
+
+  when(inst_fsr.io.done === 1.U) {
+    // should simplify to one statement
+    // if one statement, replace the '1' with the corresponding variable (mlen_left)
+    // again, min size is 8 bits (one byte)
+    when(io.mlen_left === 1.U) {
+      // this nasty line performs xor with message (32 bits) and mlen_left then recombines it with the rest of the state
+      // some kind of partial assignment into state would be better, but that is not quite allowed
+      io.state_out := (inst_fsr.io.state_out(127, 96 + (1 * 8)) ## (inst_fsr.io
+        .state_out((96 - 1) + (1 * 8), 96) ^ io.message(
+        (1 * 8) - 1,
+        0
+      )) ## inst_fsr.io.state_out(95, 34) ## (inst_fsr.io.state_out(
+        33,
+        32
+      ) ^ 1.U) ## inst_fsr.io.state_out(31, 0))
+      io.ciphertext_out := inst_fsr.io.state_out((64 - 1) + (1 * 8), 64) ^ io
+        .message(1 * 8, 0)
+    }.elsewhen(io.mlen_left === 2.U) {
+      io.state_out := (inst_fsr.io.state_out(127, 96 + (2 * 8)) ## (inst_fsr.io
+        .state_out((96 - 2) + (2 * 8), 96) ^ io.message(
+        (2 * 8) - 1,
+        0
+      )) ## inst_fsr.io.state_out(95, 34) ## (inst_fsr.io.state_out(
+        33,
+        32
+      ) ^ 2.U) ## inst_fsr.io.state_out(31, 0))
+      io.ciphertext_out := inst_fsr.io.state_out((64 - 2) + (2 * 8), 64) ^ io
+        .message(2 * 8, 0)
+    }.elsewhen(io.mlen_left === 3.U) {
+      io.state_out := (inst_fsr.io.state_out(127, 96 + (3 * 8)) ## (inst_fsr.io
+        .state_out((96 - 3) + (3 * 8), 96) ^ io.message(
+        (3 * 8) - 1,
+        0
+      )) ## inst_fsr.io.state_out(95, 34) ## (inst_fsr.io.state_out(
+        33,
+        32
+      ) ^ 3.U) ## inst_fsr.io.state_out(31, 0))
+      io.ciphertext_out := inst_fsr.io.state_out((64 - 3) + (3 * 8), 64) ^ io
+        .message(3 * 8, 0)
+    }.otherwise {}
+  }
+    .otherwise {
+      inst_fsr.io.start := 0.U
+      temp_partial_state := 0.U
+      io.done := 0.U
+    }
+}
+
+class finalization() extends Module {
+  val io = IO(new Bundle {})
+}
+
+class decrypt_once() extends Module {
+  val io = IO(new Bundle {
+    val state = Input(UInt(128.W))
+    val key = Input(UInt(128.W))
+    val state_out = Output(UInt(128.W))
+    val ciphertext = Input(UInt(32.W))
+    val message_out = Output(UInt(32.W))
+    val start = Input(UInt(1.W))
+    val done = Output(UInt(1.W))
+  })
+  val inst_frame = Module(new frame_bit_init())
+  val frame_out = Wire(UInt(128.W))
+  inst_frame.io.in := 5.U
+  inst_frame.io.state := io.state
+  frame_out := inst_frame.io.state_out
+  val tick_gen = Module(new tick())
+  tick_gen.io.in := io.start
+
+  val inst_fsr = Module(new FSR_N_Reg())
+  inst_fsr.io.key := io.key
+  inst_fsr.io.state := frame_out
+  inst_fsr.io.steps := 8.U
+  inst_fsr.io.start := tick_gen.io.out_tick
+
+  when(inst_fsr.io.done === 1.U) {
+    // The state_out value should be "stored" in a wire after xoring with the message, but since they don't overlap, they don't need to come from a single wire
+
+    io.message_out := inst_fsr.io.state_out(95, 64) ^ io.ciphertext(31, 0)
+    // not sure if xor with output (message_out) is allowed
+    // if chisel treats the output as a connection that's ready to use, this should work
+    // minor simplification here by putting the xor ciphertext as a scala variable; not sure if this works
+    // if this doesn't work, just substitute the variable with what it equals to
+    val xor_temp = inst_fsr.io.state_out(95, 64) ^ io.ciphertext(31, 0)
+    io.state_out := (xor_temp) ## inst_fsr.io.state_out(
+      95,
+      0
+    )
+    io.done := 1.U
+  }
+    .otherwise {
+      inst_fsr.io.start := 0.U
+      io.done := 0.U
+    }
+
+}
+
+class partial_decrypt_once() extends Module {
+  val io = IO(new Bundle {
+    val state = Input(UInt(128.W))
+    val key = Input(UInt(128.W))
+    val state_out = Output(UInt(128.W))
+    val ciphertext = Input(UInt(32.W))
+    val c_len_left = Input(UInt(3.W))
+    val message_out = Output(UInt(32.W))
+    val start = Input(UInt(1.W))
+    val done = Output(UInt(1.W))
+  })
+  val inst_frame = Module(new frame_bit_init())
+  val frame_out = Wire(UInt(128.W))
+  inst_frame.io.in := 5.U
+  inst_frame.io.state := io.state
+  frame_out := inst_frame.io.state_out
+  val tick_gen = Module(new tick())
+  tick_gen.io.in := io.start
+  val inst_fsr = Module(new FSR_N_Reg())
+  inst_fsr.io.key := io.key
+  inst_fsr.io.state := frame_out
+  inst_fsr.io.steps := 8.U
+  inst_fsr.io.start := tick_gen.io.out_tick
+  val temp_partial_state = Wire(UInt(32.W))
+
+  // ideally this isn't needed, but it's used due to partial reading for xor with 1.U
+  val number_xor = Wire(UInt(128.W))
+
+  when(inst_fsr.io.done === 1.U) {
+    when(io.c_len_left === 1.U) {
+      // take first eight bits
+
+      io.message_out := inst_fsr.io.state_out(64 + (8 * 1), 64) ^ io.ciphertext(
+        31,
+        0
+      )
+      number_xor := (inst_fsr.io.state_out(127, 96 + (8 * 1)) ## (inst_fsr.io
+        .state_out(96 + (8 * 1) - 1, 96) ^ io.message_out(31, 0)) ## inst_fsr.io
+        .state_out(96 - 1, 0))
+      io.state_out := number_xor(127, 34) ## number_xor(
+        33,
+        32
+      ) ^ 1.U ## number_xor(31, 0)
+      // number_xor := inst_fsr.io.state_out(127, 96 + (8 * 1)) ## (
+      //   inst_fsr.io.state_out((96 + (8 * 1)) - 1, 96) ^ io.ciphertext((8 - 1), 0)
+      // ) ## inst_fsr.io.state_out(95, 0)
+      // io.state_out := number_xor(127, 34) ## (number_xor(
+      //   33,
+      //   32
+      // ) ^ 1.U) ## number_xor(31, 0)
+    }
+      .elsewhen(io.c_len_left === 2.U) {
+        // take up to second eight bits
+
+        io.message_out := inst_fsr.io.state_out(64 + (8 * 2), 64) ^ io
+          .ciphertext(31, 0)
+        number_xor := (inst_fsr.io
+          .state_out(127, 96 + (8 * 2)) ## (inst_fsr.io.state_out(
+          96 + (8 * 2) - 1,
+          96
+        ) ^ io.message_out(31, 0)) ## inst_fsr.io.state_out(96 - 1, 0))
+        io.state_out := number_xor(127, 34) ## number_xor(
+          33,
+          32
+        ) ^ 1.U ## number_xor(31, 0)
+      }
+      .elsewhen(io.c_len_left === 3.U) {
+        // take up to third eight bits (max)
+
+        io.message_out := inst_fsr.io.state_out(64 + (8 * 3), 64) ^ io
+          .ciphertext(31, 0)
+        number_xor := (inst_fsr.io
+          .state_out(127, 96 + (8 * 3)) ## (inst_fsr.io.state_out(
+          96 + (8 * 3) - 1,
+          96
+        ) ^ io.message_out(31, 0)) ## inst_fsr.io.state_out(96 - 1, 0))
+        io.state_out := number_xor(127, 34) ## number_xor(
+          33,
+          32
+        ) ^ 1.U ## number_xor(31, 0)
+      }
+      .otherwise {
+        number_xor := 0.U
+        io.state_out := 0.U
+        io.done := 0.U
+      }
+  }
+    .otherwise {
+      inst_fsr.io.start := 0.U
+      temp_partial_state := 0.U
+      number_xor := 0.U
+    }
 }
 
 class FSR_N_Reg() extends Module {
