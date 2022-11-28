@@ -612,6 +612,7 @@ class partial_encrypt_once() extends Module {
       io.ciphertext_out := inst_fsr.io.state_out((64 - 3) + (3 * 8), 64) ^ io
         .message(3 * 8, 0)
     }.otherwise {}
+    io.done := 1.U
   }
     .otherwise {
       inst_fsr.io.start := 0.U
@@ -621,7 +622,55 @@ class partial_encrypt_once() extends Module {
 }
 
 class finalization() extends Module {
-  val io = IO(new Bundle {})
+  val io = IO(new Bundle {
+    val state = Input(UInt(128.W))
+    val key = Input(UInt(128.W))
+    val tag = Output(UInt(64.W))
+    val start = Input(UInt(1.W))
+    val done = Output(UInt(1.W))
+  })
+  val inst_frame = Module(new whole_frame_bit())
+  val temp_state = Reg(UInt(128.W))
+  temp_state := io.state
+  inst_frame.io.state := temp_state
+  inst_frame.io.in := 7.U
+  val tick_gen = Module(new tick())
+  tick_gen.io.in := io.start
+  val inst_fsr = Module(new FSR_N_Reg())
+  inst_fsr.io.start := tick_gen.io.out_tick
+  inst_fsr.io.state := inst_frame.io.out
+  inst_fsr.io.key := io.key
+  inst_fsr.io.steps := 8.U
+
+  val first_fsr :: second_fsr :: Nil = Enum(2)
+  val state_reg = RegInit(first_fsr)
+
+  val temp_tag1 = Wire(UInt(32.W))
+  val temp_tag2 = Wire(UInt(32.W))
+
+  when(state_reg === first_fsr) {
+    inst_frame.io.state := temp_state
+    // start fsr, then wait for done
+    when(tick_gen.io.out_tick === 1.U) {
+      inst_fsr.io.start := 1.U
+    }
+      .elsewhen(inst_fsr.io.done === 1.U) {
+        temp_tag1(31, 0) := inst_fsr.io.state_out(95, 64)
+        // this line below automatically goes into inst_frame
+        temp_state := inst_fsr.io.state_out
+        inst_fsr.io.steps := 5.U
+        inst_fsr.io.start := 1.U
+        state_reg := second_fsr
+      }
+  }
+    .elsewhen(state_reg === second_fsr) {
+      when(inst_fsr.io.done === 1.U) {
+        temp_tag2(63, 32) := inst_fsr.io.state_out(95, 64)
+        io.tag := temp_tag1(63, 32) ## temp_tag1(31, 0)
+        io.done := 1.U
+      }
+    }
+    .otherwise {}
 }
 
 class decrypt_once() extends Module {
@@ -756,6 +805,7 @@ class partial_decrypt_once() extends Module {
         io.state_out := 0.U
         io.done := 0.U
       }
+    io.done := 1.U
   }
     .otherwise {
       inst_fsr.io.start := 0.U
