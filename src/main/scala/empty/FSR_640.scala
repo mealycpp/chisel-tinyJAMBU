@@ -924,7 +924,7 @@ object FSR_640Main extends App {
   // emitVerilog(new FSR_640(1024), Array("--target-dir", "generated/1024"))
   emitVerilog(
     new initialization_tinyJAMBU_once(),
-    Array("--target-dir", "whole")
+    Array("--target-dir", "generated/whole")
   )
   emitVerilog(
     new initialization_tinyJAMBU(),
