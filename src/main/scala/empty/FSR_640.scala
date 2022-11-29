@@ -653,6 +653,8 @@ class finalization() extends Module {
     // start fsr, then wait for done
     when(tick_gen.io.out_tick === 1.U) {
       inst_fsr.io.start := 1.U
+      io.done := 0.U
+      state_reg := first_fsr
     }
       .elsewhen(inst_fsr.io.done === 1.U) {
         temp_tag1(31, 0) := inst_fsr.io.state_out(95, 64)
@@ -667,12 +669,24 @@ class finalization() extends Module {
       when(inst_fsr.io.done === 1.U) {
         temp_tag2(63, 32) := inst_fsr.io.state_out(95, 64)
         io.tag := temp_tag1(63, 32) ## temp_tag1(31, 0)
+        inst_fsr.io.start := 0.U
         io.done := 1.U
       }
     }
     .otherwise {}
 }
 
+// verification uses the same steps as finalization with an extra step to compare tags
+class verification extends Module {
+  val io = IO(new Bundle {
+    val state = Input(UInt(128.W))
+    val key = Input(UInt(128.W))
+    val tag
+    val start
+    val done
+    val verified = Output(UInt(1.W))
+  })
+}
 class decrypt_once() extends Module {
   val io = IO(new Bundle {
     val state = Input(UInt(128.W))
