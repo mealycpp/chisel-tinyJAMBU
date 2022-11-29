@@ -20,7 +20,7 @@ class FSR_once extends Module {
     47
   ) ^ io.state(0) ^ io.key) ## io.state(127, 1))
 }
-class FSR_640(ROUNDS: Int) extends Module {
+class FSR_128_N(ROUNDS: Int) extends Module {
   val io = IO(new Bundle {
     val state = Input(UInt(128.W))
     val key = Input(UInt(128.W))
@@ -443,6 +443,77 @@ class process_AD() extends Module {
     val state = Input(UInt(128.W))
     val key = Input(UInt(128.W))
     val ad = Decoupled(UInt(32.W))
+    val adlen = Input(UInt(32.W))
+    val start = Input(UInt(1.W))
+    val done = Output(UInt(1.W))
+    val state_out = Output(UInt(128.W))
+  })
+
+  val adlen_left = Reg(UInt(32.W))
+  val state_reg = Reg(UInt(128.W))
+  val ad_fifo = Queue(io.ad, 16)
+
+  val tick_gen = Module(new tick())
+  tick_gen.io.in := io.start
+
+  val inst_once = Module(new process_AD_once())
+
+  val inst_partial = Module(new process_partial_once())
+
+  // val first_fsr :: second_fsr :: Nil = Enum(2)
+  // val state_reg = RegInit(first_fsr)
+  inst_partial.io.adlen_left := adlen_left
+
+  when (tick_gen.io.out_tick === 1.U) {
+    adlen_left := io.adlen
+    state_reg := io.state
+    // pass the required data to both partial and whole block
+    inst_once.io.key := io.key
+    inst_once.io.state := state_reg
+    inst_once.io.ad := io.ad
+
+    inst_partial.io.key := io.key
+    inst_partial.io.state := state_reg
+    inst_partial.io.ad := io.ad
+
+    // start needs to be controlled, so drive it in the when statements
+    when (adlen_left >= 4.U) {
+      inst_once.io.start := 1.U
+    }
+    .elsewhen(adlen_left < 4.U) {
+      inst_partial.io.start := 1.U
+    }
+  }
+  // // This line below doesn't work because we need to know who was running
+  // when (inst_once.io.done === 1.U || inst_partial.io.done === 1.U) {
+  //   adlen_left := adlen_left - 4.U
+    
+  //   when (adlen_left >= 4) {
+  //     inst_once.io.start := 1.U
+  //   }
+  //   .elsewhen(adlen_left < 4) {
+  //     inst_partial.io.start := 1.U
+  //   }
+
+  when (inst_once.io.done === 1.U) {
+    adlen_left := adlen_left - 4.U
+  }
+  .elsewhen (inst_partial.io.done === 1.U) {
+    adlen_left := 0.U
+
+  }
+  .otherwise {
+    adlen_left := 0.U
+    inst_once.io.start := 0.U
+    inst_partial.io.start := 0.U
+  }
+}
+
+class process_AD_streaming() extends Module {
+  val io = IO(new Bundle {
+    val state = Input(UInt(128.W))
+    val key = Input(UInt(128.W))
+    val ad = Decoupled(UInt(32.W))
     val adlen = Input(UInt(10.W))
     val fifo_ad_in = Input(UInt(1.W))
     val start = Input(UInt(1.W))
@@ -463,46 +534,24 @@ class process_AD() extends Module {
   val process_once = Module(new process_AD_once())
   val process_state_in = Reg(UInt(128.W))
   process_state_in := io.state
-  val process_state_out = Wire(UInt(128.W))
   process_once.io.ad := ad_fifo.deq()
   process_once.io.key := io.key
   process_once.io.start := start_process_AD.io.out_tick
   process_once.io.state := process_state_in
-  process_state_out := process_once.io.state_out
   process_once.io.start := 0.U
 
-  val process_partial = Module(new process_partial_once())
-  val process_partial_state_in = Wire(UInt(128.W))
-  val process_partial_state_out = Wire(UInt(128.W))
-  process_partial.io.ad := io.ad
-  process_partial.io.start := 0.U
-  process_partial.io.key := io.key
-  process_partial.io.state := process_partial_state_in
-  process_partial_state_out := process_partial.io.state_out
-  process_partial.io.ad := 0.U
-  process_partial.io.adlen_left := 0.U
-
-  when(start_process_AD.io.out_tick === 1.U) {
-    // start process_once
-    // depending on partial or not, connect the appropriate values to the modules
-    when(ad_count >= 4.U) {
-      process_state_in := process_state_out
-      ad_count := ad_count - 4.U
+  io.state_out := process_once.io.state_out
+  when(ad_fifo.ready === true.B) {
+    process_once.io.ad := ad_fifo.deq()
+    process_once.io.start := 1.U
+  } .elsewhen(process_once.io.done === 1.U) {
+    process_state_in := process_once.io.state_out
+    when (ad_fifo.ready === true.B) {
+      process_once.io.ad := ad_fifo.deq()
       process_once.io.start := 1.U
-    }.elsewhen(ad_count < 4.U) {
-      // perform partial block:
-      process_partial.io.adlen_left := ad_count
-      // assigning input and output from process_state_out will probably cause issues
-      process_partial.io.state := process_state_out
-      process_state_out := process_partial.io.state_out
-      ad_count := 0.U
-      process_partial.io.start := 1.U
-    }.otherwise {
-      // reset start signals when processing
-      process_once.io.start := 0.U
-      process_partial.io.start := 0.U
     }
-  }.otherwise {}
+  }
+  .otherwise {}
 }
 
 class encrypt_once() extends Module {
@@ -681,9 +730,9 @@ class verification extends Module {
   val io = IO(new Bundle {
     val state = Input(UInt(128.W))
     val key = Input(UInt(128.W))
-    val tag
-    val start
-    val done
+    // val tag
+    // val start
+    // val done
     val verified = Output(UInt(1.W))
   })
 }
@@ -841,7 +890,7 @@ class FSR_N_Reg() extends Module {
   val temp_state_out = Wire(UInt(128.W))
   val temp_count = Reg(UInt(10.W))
   // initialize FSR_128
-  val FSR_128 = Module(new FSR_640(128))
+  val FSR_128 = Module(new FSR_128_N(128))
   val edge_detect = Module(new tick())
   edge_detect.io.in := io.start
 
@@ -870,7 +919,7 @@ class FSR_N_Reg() extends Module {
 }
 object FSR_640Main extends App {
   println("Generating the FSR hardware")
-  // emitVerilog(new FSR_N_Reg(), Array("--target-dir", "generated"))
+  emitVerilog(new FSR_N_Reg(), Array("--target-dir", "generated"))
   // emitVerilog(new FSR_640(640), Array("--target-dir", "generated/640"))
   // emitVerilog(new FSR_640(1024), Array("--target-dir", "generated/1024"))
   emitVerilog(

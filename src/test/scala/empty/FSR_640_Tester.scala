@@ -126,7 +126,7 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
   "FSR_640" should "work" in {
-    test(new FSR_640(640)) { dut =>
+    test(new FSR_128_N(640)) { dut =>
       // val key = BigInt("00102030405060708090A0B0C0D0E0F0", 16)
       // val key = BigInt("00102030405060708090A0B0C0D0E0F", 16)
       dut.io.key.poke(key)
@@ -136,7 +136,7 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
   "FSR_640_1" should "work" in {
-    test(new FSR_640(5)) { dut =>
+    test(new FSR_128_N(5)) { dut =>
       // val key = BigInt("00102030405060708090A0B0C0D0E0F", 16)
       dut.io.key.poke(key)
       dut.io.state.poke(0)
@@ -144,7 +144,7 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
   "FSR_640_2" should "work" in {
-    test(new FSR_640(1)) { dut =>
+    test(new FSR_128_N(1)) { dut =>
       // val key = BigInt("00102030405060708090A0B0C0D0E0F", 16)
       dut.io.key.poke(key)
       dut.io.state.poke(0)
@@ -152,7 +152,7 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
   "FSR_640_3" should "work" in {
-    test(new FSR_640(3)) { dut =>
+    test(new FSR_128_N(3)) { dut =>
       // val key = BigInt("00102030405060708090A0B0C0D0E0F", 16)
       dut.io.key.poke(key)
       dut.io.state.poke(0)
@@ -160,7 +160,7 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
   "FSR_640_128" should "not fail" in {
-    test(new FSR_640(128)) { dut =>
+    test(new FSR_128_N(128)) { dut =>
       // val key = BigInt("00102030405060708090A0B0C0D0E0F", 16)
       dut.io.key.poke(key)
       dut.io.state.poke(0)
@@ -168,7 +168,7 @@ class FSR_640_Tester extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
   "FSR_640_640" should "not fail" in {
-    test(new FSR_640(640)) { dut =>
+    test(new FSR_128_N(640)) { dut =>
       // val key = BigInt("00102030405060708090A0B0C0D0E0F", 16)
       dut.io.key.poke(key)
       dut.io.state.poke(0)
