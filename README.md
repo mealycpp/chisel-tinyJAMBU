@@ -1,5 +1,3 @@
-# chisel-empty
+# chisel-tinyJAMBU
 
-An almost empty chisel project as a starting point for hardware design.
-
-See the `Makefile` for the hardware and test targets.
+Implementation of tinyJAMBU using Chisel
