@@ -1,3 +1,3 @@
 # chisel-tinyJAMBU
 
-Implementation of tinyJAMBU using Chisel
+Implementation of tinyJAMBU NLFSR using Chisel
